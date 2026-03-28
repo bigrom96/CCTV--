@@ -6,6 +6,7 @@
 <title>VisionProtect Pro — Спецификация оборудования</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* ... (стили остаются без изменений) ... */
   :root {
     --bg: #0a0e17;
     --surface: #111827;
@@ -906,7 +907,7 @@ function render() {
           <div class="item-info">
             <input type="text" class="custom-name-input" value="${escapeHtml(item.name)}" onchange="renameCustom(${idx}, this.value)">
           </div>
-          <input type="number" class="qty-input" min="1" max="9999" value="${item.qty}" oninput="qtyCustom(${idx}, this.value)">
+          <input type="number" class="qty-input" min="1" max="9999" value="${item.qty}" onchange="qtyCustom(${idx}, this.value)">
           <button class="btn-del" onclick="delCustom(${idx})">✕</button>
         </div>
       </div>`;
@@ -964,7 +965,8 @@ function pillHTML(id, field, opts) {
 }
 
 function qtyHTML(id) {
-  return `<input type="number" class="qty-input" min="1" max="9999" value="${ss(id).qty}" oninput="setQty('${id}', this.value)">`;
+  // Используем onchange вместо oninput — клавиатура не пропадает при вводе
+  return `<input type="number" class="qty-input" min="1" max="9999" value="${ss(id).qty}" onchange="setQty('${id}', this.value)">`;
 }
 
 function chkItem(id, v) { ss(id).checked = v; saveToStorage(); render(); }
@@ -983,7 +985,7 @@ function addCustom() {
 function delCustom(idx) { state.custom.splice(idx,1); saveToStorage(); render(); }
 function chkCustom(idx, v) { state.custom[idx].checked = v; saveToStorage(); updateStats(); }
 function renameCustom(idx, v) { state.custom[idx].name = v; saveToStorage(); }
-function qtyCustom(idx, v) { state.custom[idx].qty = Math.max(1, parseInt(v)||1); saveToStorage(); }
+function qtyCustom(idx, v) { state.custom[idx].qty = Math.max(1, parseInt(v)||1); saveToStorage(); render(); }
 
 function getCheckedItems() {
   const result = [];
