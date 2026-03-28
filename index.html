@@ -76,7 +76,6 @@
   .hdcvi .tech-dot { background: var(--accent2); }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-  /* Project manager bar */
   .project-bar {
     background: var(--surface2);
     border-radius: 20px;
@@ -97,10 +96,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .project-buttons {
-    display: flex;
-    gap: 8px;
-  }
   .project-btn {
     background: rgba(100,116,139,0.2);
     border: none;
@@ -110,15 +105,7 @@
     font-weight: 600;
     color: var(--text-muted);
     cursor: pointer;
-    transition: all 0.2s;
   }
-  .project-btn.active {
-    background: var(--accent);
-    color: #000;
-  }
-  .project-btn:active { transform: scale(0.96); }
-
-  /* Quick add camera */
   .quick-cam {
     display: flex;
     align-items: center;
@@ -128,7 +115,6 @@
     padding: 12px;
     margin-bottom: 16px;
   }
-  .quick-cam span { font-size: 14px; font-weight: 600; }
   .cam-counter {
     display: flex;
     align-items: center;
@@ -157,8 +143,6 @@
     font-weight: 700;
     color: var(--text);
   }
-
-  /* Notes area */
   .notes-area {
     background: var(--surface2);
     border-radius: 16px;
@@ -177,8 +161,6 @@
     color: var(--text);
     resize: vertical;
   }
-
-  /* Templates */
   .template-row {
     display: flex;
     gap: 8px;
@@ -192,97 +174,132 @@
     padding: 6px 14px;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.2s;
   }
-  .template-btn:active { background: var(--accent); color: #000; }
-
-  /* Section styles (same as before, but extended) */
-  .section { margin-bottom: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .section {
+    margin-bottom: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
   .section-header {
-    padding: 13px 14px; display: flex; align-items: center; gap: 10px;
-    cursor: pointer; user-select: none; background: var(--surface2);
-    border-bottom: 1px solid var(--border); -webkit-tap-highlight-color: transparent;
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
   }
   .section-icon { font-size: 17px; width: 28px; text-align: center; }
-  .section-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; flex: 1; }
-  .section-badge { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: 20px; background: rgba(100,116,139,0.2); color: var(--text-muted); }
+  .section-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; flex: 1; }
+  .section-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(100,116,139,0.2);
+    color: var(--text-muted);
+  }
   .section-badge.has-items { background: rgba(0,229,160,0.15); color: var(--success); }
   .section-chevron { color: var(--text-muted); transition: transform 0.2s; font-size: 11px; }
   .section-chevron.open { transform: rotate(180deg); }
 
   .item-row {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 11px 14px; border-bottom: 1px solid rgba(31,45,69,0.5); transition: background 0.12s;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(31,45,69,0.5);
     flex-wrap: wrap;
   }
   .item-row:last-child { border-bottom: none; }
   .item-row.warning { border-left: 3px solid var(--danger); background: rgba(255,59,92,0.04); padding-left: 11px; }
   .item-row.warning .item-name { color: #ff8fa3; }
 
-  .item-row-main { display: flex; align-items: center; gap: 10px; width: 100%; }
-  .item-row-sub { display: flex; align-items: center; gap: 8px; width: 100%; padding-left: 40px; margin-top: 6px; flex-wrap: wrap; }
-
-  .sub-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
-
-  .pill-toggle { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; gap: 0; }
+  .item-row-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  .item-row-sub {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding-left: 40px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .sub-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+  .pill-toggle {
+    display: flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
   .pill-btn {
-    padding: 5px 10px; border: none; background: transparent;
-    color: var(--text-muted); font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    padding: 5px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
   }
   .pill-btn.active { background: var(--surface2); color: var(--text); font-weight: 600; }
   .pill-btn:first-child { border-right: 1px solid var(--border); }
 
   .check-wrap { position: relative; flex-shrink: 0; }
   .check-wrap input[type="checkbox"] { position: absolute; opacity: 0; width: 30px; height: 30px; cursor: pointer; z-index: 2; margin: 0; }
-  .check-box { width: 30px; height: 30px; border-radius: 8px; border: 2px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; transition: all 0.18s; pointer-events: none; }
-  .check-wrap input:checked + .check-box { background: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(0,229,160,0.3); }
-  .check-mark { color: #000; font-size: 15px; font-weight: bold; opacity: 0; transition: opacity 0.12s; }
+  .check-box {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .check-wrap input:checked + .check-box { background: var(--success); border-color: var(--success); }
+  .check-mark { color: #000; font-size: 15px; font-weight: bold; opacity: 0; }
   .check-wrap input:checked + .check-box .check-mark { opacity: 1; }
 
   .item-info { flex: 1; min-width: 0; }
-  .item-name { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.3; }
+  .item-name { font-size: 14px; font-weight: 500; color: var(--text); }
   .item-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
   select, input[type="number"], input[type="text"] {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-    color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 13px;
-    padding: 6px 8px; outline: none; transition: border-color 0.2s;
-    -webkit-appearance: none; appearance: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+    padding: 6px 8px;
+    outline: none;
   }
-  select:focus, input:focus { border-color: var(--accent); }
-  select {
-    padding-right: 26px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 8px center; cursor: pointer;
-  }
-  .qty-input { width: 58px; text-align: center; flex-shrink: 0; }
+  .qty-input { width: 58px; text-align: center; }
   .spec-select { flex-shrink: 0; }
   .warn-badge { font-size: 15px; flex-shrink: 0; align-self: center; cursor: pointer; }
-  .auto-fix-btn {
-    background: rgba(0,212,255,0.2);
-    border: none;
-    border-radius: 8px;
-    padding: 4px 8px;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--accent);
-    cursor: pointer;
-    margin-left: 8px;
-  }
 
   .sub-item-row {
-    display: flex; align-items: center; gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 7px 14px 7px 44px;
     background: rgba(0,212,255,0.03);
-    border-bottom: 1px solid rgba(31,45,69,0.3);
-    font-size: 13px; color: var(--text-muted);
+    font-size: 13px;
+    color: var(--text-muted);
   }
   .clips-tag {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
-    border-radius: 6px; padding: 3px 8px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--accent);
   }
 
   .add-custom { padding: 10px 14px; background: var(--surface2); border-top: 1px solid var(--border); }
@@ -290,49 +307,135 @@
   .add-row input[type="text"] { flex: 1; }
   .btn-add {
     background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,212,255,0.08));
-    border: 1px solid rgba(0,212,255,0.3); color: var(--accent); border-radius: 8px;
-    padding: 8px 12px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700;
-    cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 700;
+    cursor: pointer;
   }
-  .btn-add:active { background: rgba(0,212,255,0.25); transform: scale(0.97); }
-  .btn-del { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 17px; padding: 4px 6px; border-radius: 6px; transition: color 0.15s; line-height: 1; flex-shrink: 0; }
-  .btn-del:active { color: var(--danger); }
-  .custom-name-input { width: 100%; background: transparent !important; border: none !important; border-bottom: 1px solid var(--border) !important; border-radius: 0 !important; padding: 2px 0 !important; font-size: 14px; color: var(--text) !important; }
+  .btn-del {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 17px;
+  }
+  .custom-name-input {
+    width: 100%;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    border-radius: 0 !important;
+    padding: 2px 0 !important;
+    font-size: 14px;
+    color: var(--text) !important;
+  }
 
-  .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,14,23,0.97); border-top: 1px solid var(--border); backdrop-filter: blur(16px); padding: 10px 14px 16px; z-index: 100; }
-  .bottom-inner { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; align-items: center; }
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10,14,23,0.97);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    padding: 10px 14px 16px;
+    z-index: 100;
+  }
+  .bottom-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+  }
   .btn-export {
-    flex: 1; background: linear-gradient(135deg, #006d84, #00a8c8); border: none; color: #fff;
-    border-radius: 12px; padding: 14px 16px; font-family: 'Rajdhani', sans-serif;
-    font-size: 18px; font-weight: 700; letter-spacing: 0.5px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,168,200,0.3);
+    flex: 1;
+    background: linear-gradient(135deg, #006d84, #00a8c8);
+    border: none;
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
-  .btn-export:active { transform: scale(0.98); }
-  .btn-clear { background: rgba(255,59,92,0.1); border: 1px solid rgba(255,59,92,0.3); color: var(--danger); border-radius: 12px; padding: 14px 16px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-  .btn-clear:active { background: rgba(255,59,92,0.2); transform: scale(0.97); }
-  .stats-bar { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); text-align: center; padding: 5px 0 0; max-width: 600px; margin: 0 auto; }
+  .btn-clear {
+    background: rgba(255,59,92,0.1);
+    border: 1px solid rgba(255,59,92,0.3);
+    color: var(--danger);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .stats-bar {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 5px 0 0;
+  }
 
-  .toast { position: fixed; top: 68px; left: 50%; transform: translateX(-50%) translateY(-10px); background: var(--success); color: #000; padding: 10px 20px; border-radius: 10px; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; z-index: 999; opacity: 0; pointer-events: none; transition: all 0.3s; white-space: nowrap; }
+  .toast {
+    position: fixed;
+    top: 68px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: var(--success);
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+  }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px 20px 0 0; padding: 24px 20px 36px; width: 100%; max-width: 600px; animation: slideUp 0.25s ease; }
-  @keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
-  .modal h3 { font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; color:var(--danger); margin-bottom:8px; }
-  .modal p { color:var(--text-muted); font-size:14px; margin-bottom:20px; line-height:1.5; }
-  .modal-btns { display:flex; gap:10px; }
-  .modal-btns button { flex:1; padding:14px; border-radius:12px; border:none; font-family:'Rajdhani',sans-serif; font-size:17px; font-weight:700; cursor:pointer; }
-  .btn-confirm-clear { background:var(--danger); color:#fff; }
-  .btn-cancel { background:var(--surface2); border:1px solid var(--border) !important; color:var(--text); }
-
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 36px;
+    width: 100%;
+    max-width: 600px;
+  }
+  .modal h3 { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--danger); margin-bottom: 8px; }
+  .modal p { color: var(--text-muted); margin-bottom: 20px; }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btns button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-confirm-clear { background: var(--danger); color: #fff; }
+  .btn-cancel { background: var(--surface2); border: 1px solid var(--border) !important; color: var(--text); }
   .project-input {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 8px 12px;
     color: var(--text);
-    font-size: 14px;
     width: 100%;
   }
 </style>
@@ -363,112 +466,88 @@
 </div>
 
 <script>
-// ========================== STATE ==========================
+// ==================== STATE ====================
 let state = {
   projects: {},
   currentProjectId: 'default',
   tech: 'ip',
   notes: '',
-  openSections: { cameras:true, recording:true, storage:true, power:true, cabling:true, workstation:true, mounting:true, custom:true },
+  openSections: {
+    cameras: true, recording: true, storage: true,
+    power: true, cabling: true, workstation: true,
+    mounting: true, custom: true
+  },
   sections: {
-    cam: { checked:false, qty:1, spec:'4MP', form:'dome' },
-    nvr: { checked:false, qty:1, spec:'8 кан.', nvrType:'std' },
-    xvr: { checked:false, qty:1, spec:'8 кан.' },
-    hdd: { checked:false, qty:1, spec:'2TB' },
-    poe: { checked:false, qty:1, spec:'8 портов' },
-    psu: { checked:false, qty:1, spec:'10A' },
-    bnc: { checked:false, qty:10 },
-    box: { checked:false, qty:1 },
-    rj45: { checked:false, qty:20 },
-    utp: { checked:false, qty:100, env:'in' },
-    coax: { checked:false, qty:100, env:'in' },
-    gofra: { checked:false, qty:50, dia:'20mm' },
-    brackets: { checked:false, qty:1, btype:'wall' },
-    shelves: { checked:false, qty:1 },
-    fasteners: { checked:false, qty:1 },
-    monitor: { checked:false, qty:1, spec:'24"' },
-    mouse_ext: { checked:false, qty:1 },
-    hdmi: { checked:false, qty:1, spec:'3м' },
+    cam:      { checked: false, qty: 1, spec: '4MP',   form: 'dome' },
+    nvr:      { checked: false, qty: 1, spec: '8 кан.', nvrType: 'std' },
+    xvr:      { checked: false, qty: 1, spec: '8 кан.' },
+    hdd:      { checked: false, qty: 1, spec: '2TB' },
+    poe:      { checked: false, qty: 1, spec: '8 портов' },
+    psu:      { checked: false, qty: 1, spec: '10A' },
+    bnc:      { checked: false, qty: 10 },
+    box:      { checked: false, qty: 1 },
+    rj45:     { checked: false, qty: 20 },
+    utp:      { checked: false, qty: 100, env: 'in' },
+    coax:     { checked: false, qty: 100, env: 'in' },
+    gofra:    { checked: false, qty: 50,  dia: '20mm' },
+    brackets: { checked: false, qty: 1,   btype: 'wall' },
+    shelves:  { checked: false, qty: 1 },
+    fasteners:{ checked: false, qty: 1 },
+    monitor:  { checked: false, qty: 1,   spec: '24"' },
+    mouse_ext:{ checked: false, qty: 1 },
+    hdmi:     { checked: false, qty: 1,   spec: '3м' }
   },
   custom: []
 };
 
-// Helpers
+// ==================== HELPERS ====================
+function defaultSections() {
+  return JSON.parse(JSON.stringify(state.sections));
+}
+
 function loadFromStorage() {
   const saved = localStorage.getItem('vp_pro_state');
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      state = { ...state, ...parsed };
-      // Ensure projects object exists
-      if (!state.projects) state.projects = {};
+      if (parsed.projects) state.projects = parsed.projects;
+      if (parsed.currentProjectId) state.currentProjectId = parsed.currentProjectId;
       if (!state.projects[state.currentProjectId]) {
         state.projects[state.currentProjectId] = {
-          tech: state.tech,
-          notes: state.notes,
-          sections: state.sections,
-          custom: state.custom,
-          openSections: state.openSections
+          tech: 'ip',
+          notes: '',
+          sections: defaultSections(),
+          custom: [],
+          openSections: { cameras: true, recording: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true }
         };
       }
-      // Load current project data
       const cur = state.projects[state.currentProjectId];
-      if (cur) {
-        state.tech = cur.tech || 'ip';
-        state.notes = cur.notes || '';
-        state.sections = cur.sections || JSON.parse(JSON.stringify(defaultSections()));
-        state.custom = cur.custom || [];
-        state.openSections = cur.openSections || { cameras:true, recording:true, storage:true, power:true, cabling:true, workstation:true, mounting:true, custom:true };
-      }
+      state.tech = cur.tech || 'ip';
+      state.notes = cur.notes || '';
+      state.sections = cur.sections || defaultSections();
+      state.custom = cur.custom || [];
+      state.openSections = cur.openSections || { cameras: true, recording: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true };
     } catch(e) { console.warn(e); }
   } else {
-    initDefaultProject();
+    state.projects = {
+      default: {
+        tech: 'ip',
+        notes: '',
+        sections: defaultSections(),
+        custom: [],
+        openSections: { cameras: true, recording: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true }
+      }
+    };
+    state.currentProjectId = 'default';
+    state.tech = 'ip';
+    state.notes = '';
+    state.sections = defaultSections();
+    state.custom = [];
+    state.openSections = { cameras: true, recording: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true };
   }
 }
 
-function defaultSections() {
-  return {
-    cam: { checked:false, qty:1, spec:'4MP', form:'dome' },
-    nvr: { checked:false, qty:1, spec:'8 кан.', nvrType:'std' },
-    xvr: { checked:false, qty:1, spec:'8 кан.' },
-    hdd: { checked:false, qty:1, spec:'2TB' },
-    poe: { checked:false, qty:1, spec:'8 портов' },
-    psu: { checked:false, qty:1, spec:'10A' },
-    bnc: { checked:false, qty:10 },
-    box: { checked:false, qty:1 },
-    rj45: { checked:false, qty:20 },
-    utp: { checked:false, qty:100, env:'in' },
-    coax: { checked:false, qty:100, env:'in' },
-    gofra: { checked:false, qty:50, dia:'20mm' },
-    brackets: { checked:false, qty:1, btype:'wall' },
-    shelves: { checked:false, qty:1 },
-    fasteners: { checked:false, qty:1 },
-    monitor: { checked:false, qty:1, spec:'24"' },
-    mouse_ext: { checked:false, qty:1 },
-    hdmi: { checked:false, qty:1, spec:'3м' },
-  };
-}
-
-function initDefaultProject() {
-  state.projects = {
-    default: {
-      tech: 'ip',
-      notes: '',
-      sections: defaultSections(),
-      custom: [],
-      openSections: { cameras:true, recording:true, storage:true, power:true, cabling:true, workstation:true, mounting:true, custom:true }
-    }
-  };
-  state.currentProjectId = 'default';
-  state.tech = 'ip';
-  state.notes = '';
-  state.sections = defaultSections();
-  state.custom = [];
-  state.openSections = { cameras:true, recording:true, storage:true, power:true, cabling:true, workstation:true, mounting:true, custom:true };
-}
-
 function saveToStorage() {
-  // Save current project data into projects object
   state.projects[state.currentProjectId] = {
     tech: state.tech,
     notes: state.notes,
@@ -482,166 +561,8 @@ function saveToStorage() {
   }));
 }
 
-// Quick functions
 function ss(id) { return state.sections[id]; }
 
-// Auto-fix critical components based on camera count
-function autoFixCriticals() {
-  const camQty = ss('cam').qty || 1;
-  if (camQty === 0) return;
-  if (state.tech === 'ip') {
-    // PoE switch: choose port count
-    let ports = '8 портов';
-    if (camQty <= 4) ports = '4 порта';
-    else if (camQty <= 8) ports = '8 портов';
-    else if (camQty <= 16) ports = '16 портов';
-    else ports = '24 порта';
-    ss('poe').spec = ports;
-    if (!ss('poe').checked) ss('poe').checked = true;
-  } else {
-    // HDCVI: power supply current (0.5A per camera typical)
-    let amps = '5A';
-    if (camQty <= 4) amps = '5A';
-    else if (camQty <= 8) amps = '10A';
-    else amps = '20A';
-    ss('psu').spec = amps;
-    if (!ss('psu').checked) ss('psu').checked = true;
-  }
-  // HDD always critical
-  if (!ss('hdd').checked) ss('hdd').checked = true;
-  saveToStorage();
-  render();
-  showToast('Автоподбор выполнен ✓', '#00e5a0');
-}
-
-// Change camera quantity with auto-suggest
-function changeCameraQty(delta) {
-  let newQty = ss('cam').qty + delta;
-  if (newQty < 0) newQty = 0;
-  ss('cam').qty = newQty;
-  if (newQty > 0 && !ss('cam').checked) ss('cam').checked = true;
-  // Auto suggest connectors and boxes based on camera count
-  if (state.tech === 'ip') {
-    ss('rj45').qty = Math.max(ss('rj45').qty, newQty * 2);
-  } else {
-    ss('bnc').qty = Math.max(ss('bnc').qty, newQty * 2);
-  }
-  ss('box').qty = Math.max(ss('box').qty, newQty);
-  // auto-fix criticals
-  autoFixCriticals();
-  saveToStorage();
-  render();
-}
-
-// Templates
-function applyTemplate(templateName) {
-  if (templateName === 'apartment') {
-    ss('cam').qty = 2; ss('cam').spec = '4MP'; ss('cam').checked = true;
-    if (state.tech === 'ip') { ss('nvr').spec = '4 кан.'; ss('poe').spec = '4 порта'; }
-    else { ss('xvr').spec = '4 кан.'; ss('psu').spec = '5A'; }
-    ss('hdd').spec = '2TB'; ss('hdd').checked = true;
-    ss('box').qty = 2; ss('utp').qty = 50; ss('coax').qty = 50; ss('gofra').qty = 30;
-    ss('monitor').checked = true;
-  } else if (templateName === 'office') {
-    ss('cam').qty = 8; ss('cam').spec = '5MP'; ss('cam').checked = true;
-    if (state.tech === 'ip') { ss('nvr').spec = '8 кан.'; ss('poe').spec = '8 портов'; }
-    else { ss('xvr').spec = '8 кан.'; ss('psu').spec = '10A'; }
-    ss('hdd').spec = '4TB'; ss('hdd').checked = true;
-    ss('box').qty = 8; ss('utp').qty = 300; ss('coax').qty = 300; ss('gofra').qty = 200;
-    ss('monitor').checked = true;
-    ss('brackets').qty = 8; ss('fasteners').qty = 4;
-  } else if (templateName === 'store') {
-    ss('cam').qty = 16; ss('cam').spec = '8MP'; ss('cam').checked = true;
-    if (state.tech === 'ip') { ss('nvr').spec = '16 кан.'; ss('poe').spec = '16 портов'; }
-    else { ss('xvr').spec = '16 кан.'; ss('psu').spec = '20A'; }
-    ss('hdd').spec = '6TB'; ss('hdd').checked = true;
-    ss('box').qty = 16; ss('utp').qty = 500; ss('coax').qty = 500; ss('gofra').qty = 400;
-    ss('monitor').checked = true;
-    ss('brackets').qty = 16; ss('fasteners').qty = 8; ss('shelves').qty = 2;
-  }
-  autoFixCriticals();
-  saveToStorage();
-  render();
-  showToast(`Шаблон "${templateName}" загружен`, '#00e5a0');
-}
-
-// Project management
-function showProjectDialog() {
-  const modalDiv = document.getElementById('modal');
-  modalDiv.innerHTML = `
-    <div class="modal">
-      <h3>📁 Управление объектами</h3>
-      <p>Создайте новый объект или переключитесь на существующий.</p>
-      <div style="margin-bottom: 12px;">
-        <input type="text" id="newProjectName" class="project-input" placeholder="Название объекта (адрес)">
-        <button id="createProjectBtn" class="btn-add" style="margin-top: 8px;">➕ Создать</button>
-      </div>
-      <div id="projectList" style="margin-bottom: 20px; max-height: 200px; overflow-y: auto;"></div>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeModal()">Закрыть</button>
-      </div>
-    </div>
-  `;
-  modalDiv.style.display = 'flex';
-  // Populate project list
-  const listDiv = document.getElementById('projectList');
-  listDiv.innerHTML = '';
-  for (let id in state.projects) {
-    const btn = document.createElement('button');
-    btn.textContent = id;
-    btn.style.display = 'block';
-    btn.style.background = 'var(--surface2)';
-    btn.style.border = '1px solid var(--border)';
-    btn.style.borderRadius = '8px';
-    btn.style.padding = '8px';
-    btn.style.marginBottom = '6px';
-    btn.style.width = '100%';
-    btn.style.textAlign = 'left';
-    btn.style.cursor = 'pointer';
-    btn.onclick = () => {
-      state.currentProjectId = id;
-      loadProject(id);
-      closeModal();
-      render();
-    };
-    listDiv.appendChild(btn);
-  }
-  document.getElementById('createProjectBtn').onclick = () => {
-    const name = document.getElementById('newProjectName').value.trim();
-    if (!name) return;
-    if (!state.projects[name]) {
-      state.projects[name] = {
-        tech: state.tech,
-        notes: '',
-        sections: JSON.parse(JSON.stringify(defaultSections())),
-        custom: [],
-        openSections: state.openSections
-      };
-    }
-    state.currentProjectId = name;
-    loadProject(name);
-    closeModal();
-    render();
-  };
-}
-
-function loadProject(projId) {
-  const proj = state.projects[projId];
-  if (proj) {
-    state.tech = proj.tech;
-    state.notes = proj.notes || '';
-    state.sections = proj.sections;
-    state.custom = proj.custom || [];
-    state.openSections = proj.openSections || state.openSections;
-  }
-  saveToStorage();
-}
-
-function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-}
-
-// Critical check
 function isCritical(id) {
   const camChecked = ss('cam').checked && ss('cam').qty > 0;
   if (!camChecked) return false;
@@ -655,18 +576,168 @@ function isCritical(id) {
   return !ss(id).checked;
 }
 
-// Rendering (simplified – we integrate all new UI)
+function autoFixCriticals() {
+  const camQty = ss('cam').qty;
+  if (camQty === 0) return;
+  if (state.tech === 'ip') {
+    let ports = '8 портов';
+    if (camQty <= 4) ports = '4 порта';
+    else if (camQty <= 8) ports = '8 портов';
+    else if (camQty <= 16) ports = '16 портов';
+    else ports = '24 порта';
+    ss('poe').spec = ports;
+    if (!ss('poe').checked) ss('poe').checked = true;
+  } else {
+    let amps = '5A';
+    if (camQty <= 4) amps = '5A';
+    else if (camQty <= 8) amps = '10A';
+    else amps = '20A';
+    ss('psu').spec = amps;
+    if (!ss('psu').checked) ss('psu').checked = true;
+  }
+  if (!ss('hdd').checked) ss('hdd').checked = true;
+  saveToStorage();
+  render();
+  showToast('Автоподбор выполнен ✓', '#00e5a0');
+}
+
+function changeCameraQty(delta) {
+  let newQty = ss('cam').qty + delta;
+  if (newQty < 0) newQty = 0;
+  ss('cam').qty = newQty;
+  if (newQty > 0 && !ss('cam').checked) ss('cam').checked = true;
+  if (state.tech === 'ip') {
+    ss('rj45').qty = Math.max(ss('rj45').qty, newQty * 2);
+  } else {
+    ss('bnc').qty = Math.max(ss('bnc').qty, newQty * 2);
+  }
+  ss('box').qty = Math.max(ss('box').qty, newQty);
+  autoFixCriticals();
+  saveToStorage();
+  render();
+}
+
+function applyTemplate(name) {
+  if (name === 'apartment') {
+    ss('cam').qty = 2; ss('cam').spec = '4MP'; ss('cam').checked = true;
+    if (state.tech === 'ip') { ss('nvr').spec = '4 кан.'; ss('poe').spec = '4 порта'; }
+    else { ss('xvr').spec = '4 кан.'; ss('psu').spec = '5A'; }
+    ss('hdd').spec = '2TB'; ss('hdd').checked = true;
+    ss('box').qty = 2; ss('utp').qty = 50; ss('coax').qty = 50; ss('gofra').qty = 30;
+    ss('monitor').checked = true;
+  } else if (name === 'office') {
+    ss('cam').qty = 8; ss('cam').spec = '5MP'; ss('cam').checked = true;
+    if (state.tech === 'ip') { ss('nvr').spec = '8 кан.'; ss('poe').spec = '8 портов'; }
+    else { ss('xvr').spec = '8 кан.'; ss('psu').spec = '10A'; }
+    ss('hdd').spec = '4TB'; ss('hdd').checked = true;
+    ss('box').qty = 8; ss('utp').qty = 300; ss('coax').qty = 300; ss('gofra').qty = 200;
+    ss('monitor').checked = true;
+    ss('brackets').qty = 8; ss('fasteners').qty = 4;
+  } else if (name === 'store') {
+    ss('cam').qty = 16; ss('cam').spec = '8MP'; ss('cam').checked = true;
+    if (state.tech === 'ip') { ss('nvr').spec = '16 кан.'; ss('poe').spec = '16 портов'; }
+    else { ss('xvr').spec = '16 кан.'; ss('psu').spec = '20A'; }
+    ss('hdd').spec = '6TB'; ss('hdd').checked = true;
+    ss('box').qty = 16; ss('utp').qty = 500; ss('coax').qty = 500; ss('gofra').qty = 400;
+    ss('monitor').checked = true;
+    ss('brackets').qty = 16; ss('fasteners').qty = 8; ss('shelves').qty = 2;
+  }
+  autoFixCriticals();
+  saveToStorage();
+  render();
+  showToast(`Шаблон "${name}" загружен`, '#00e5a0');
+}
+
+function showProjectDialog() {
+  const modalDiv = document.getElementById('modal');
+  let listHtml = '';
+  for (let id in state.projects) {
+    listHtml += `<button class="project-btn" style="display:block; width:100%; margin-bottom:8px; text-align:left; padding:8px;" onclick="switchToProject('${id.replace(/'/g, "\\'")}')">📁 ${escapeHtml(id)}</button>`;
+  }
+  modalDiv.innerHTML = `
+    <div class="modal">
+      <h3>📁 Управление объектами</h3>
+      <p>Создайте новый объект или выберите существующий.</p>
+      <div style="margin-bottom:12px;">
+        <input type="text" id="newProjectName" class="project-input" placeholder="Название объекта (адрес)">
+        <button id="createProjectBtn" class="btn-add" style="margin-top:8px;">➕ Создать</button>
+      </div>
+      <div id="projectList" style="margin-bottom:20px; max-height:200px; overflow-y:auto;">${listHtml}</div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Закрыть</button>
+      </div>
+    </div>
+  `;
+  modalDiv.style.display = 'flex';
+  document.getElementById('createProjectBtn').onclick = () => {
+    const name = document.getElementById('newProjectName').value.trim();
+    if (!name) return;
+    if (!state.projects[name]) {
+      state.projects[name] = {
+        tech: state.tech,
+        notes: '',
+        sections: defaultSections(),
+        custom: [],
+        openSections: state.openSections
+      };
+    }
+    state.currentProjectId = name;
+    switchToProject(name);
+  };
+}
+
+function switchToProject(projId) {
+  const proj = state.projects[projId];
+  if (proj) {
+    state.tech = proj.tech;
+    state.notes = proj.notes || '';
+    state.sections = proj.sections;
+    state.custom = proj.custom || [];
+    state.openSections = proj.openSections || state.openSections;
+    state.currentProjectId = projId;
+    saveToStorage();
+    closeModal();
+    render();
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function confirmClear() {
+  state.sections = defaultSections();
+  state.custom = [];
+  state.notes = '';
+  autoFixCriticals();
+  saveToStorage();
+  closeModal();
+  render();
+}
+
+function openClearModal() {
+  const modalDiv = document.getElementById('modal');
+  modalDiv.innerHTML = `
+    <div class="modal">
+      <h3>⚠ Очистить всё?</h3>
+      <p>Все данные текущего объекта будут сброшены. Это действие нельзя отменить.</p>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+        <button class="btn-confirm-clear" onclick="confirmClear()">Очистить</button>
+      </div>
+    </div>
+  `;
+  modalDiv.style.display = 'flex';
+}
+
+// ==================== RENDER ====================
 function render() {
   const main = document.getElementById('main-content');
   let html = `
-    <!-- Project bar -->
     <div class="project-bar">
       <div class="project-name" onclick="showProjectDialog()">📁 ${escapeHtml(state.currentProjectId)}</div>
-      <div class="project-buttons">
-        <button class="project-btn" onclick="showProjectDialog()">Сменить</button>
-      </div>
+      <button class="project-btn" onclick="showProjectDialog()">Сменить</button>
     </div>
-    <!-- Quick camera control -->
     <div class="quick-cam">
       <span>📷 Камеры:</span>
       <div class="cam-counter">
@@ -675,11 +746,9 @@ function render() {
         <button onclick="changeCameraQty(1)">+</button>
       </div>
     </div>
-    <!-- Notes -->
     <div class="notes-area">
       <textarea id="projectNotes" placeholder="Заметки по объекту (адрес, особенности монтажа, контакты)...">${escapeHtml(state.notes)}</textarea>
     </div>
-    <!-- Templates -->
     <div class="template-row">
       <button class="template-btn" onclick="applyTemplate('apartment')">🏠 Квартира</button>
       <button class="template-btn" onclick="applyTemplate('office')">🏢 Офис</button>
@@ -687,188 +756,235 @@ function render() {
     </div>
   `;
 
-  // Render standard sections (same as before but with auto-fix button)
-  // We'll reuse the section rendering from previous version but integrate auto-fix button in warning rows
-  // For brevity, we include a simplified version that replicates the previous logic but adds auto-fix button on critical rows
-  function renderSection(key, title, icon, ids, contentGenerator) {
-    const isOpen = state.openSections[key] !== false;
-    const checked = ids.filter(id => ss(id)?.checked).length;
-    html += `<div class="section">
-      <div class="section-header" onclick="toggleSec('${key}')">
-        <span class="section-icon">${icon}</span>
-        <span class="section-title">${title}</span>
-        <span class="section-badge ${checked>0?'has-items':''}">${checked}/${ids.length}</span>
-        <span class="section-chevron ${isOpen?'open':''}">▼</span>
-      </div>`;
-    if (isOpen) {
-      html += contentGenerator();
-    }
-    html += `</div>`;
-  }
-
-  // Camera section (quick camera already above, but we keep detailed row for parameters)
+  // Камеры (детальная настройка)
   html += `<div class="section">
     <div class="section-header" onclick="toggleSec('cameras')">
       <span class="section-icon">📷</span>
       <span class="section-title">Настройки камер</span>
-      <span class="section-badge"></span>
-      <span class="section-chevron ${state.openSections.cameras?'open':''}">▼</span>
+      <span class="section-chevron ${state.openSections.cameras ? 'open' : ''}">▼</span>
     </div>`;
   if (state.openSections.cameras) {
     html += `<div class="item-row">
       <div class="item-row-main">
-        ${checkHTML('cam')}
-        <div class="item-info"><div class="item-name">Камера наблюдения</div><div class="item-sub">Разрешение · Форм-фактор</div></div>
-        ${selectHTML('cam','spec',['2MP','4MP','5MP','8MP'],'78px')}
+        ${checkboxHTML('cam')}
+        <div class="item-info">
+          <div class="item-name">Камера наблюдения</div>
+          <div class="item-sub">Разрешение · Форм-фактор</div>
+        </div>
+        ${selectHTML('cam', 'spec', ['2MP','4MP','5MP','8MP'], '78px')}
         ${qtyHTML('cam')}
       </div>
       <div class="item-row-sub">
         <span class="sub-label">Форм-фактор:</span>
-        ${pillHTML('cam','form',[{val:'dome',label:'Купол'},{val:'bullet',label:'Цилиндр'}])}
+        ${pillHTML('cam', 'form', [{val:'dome',label:'Купол'},{val:'bullet',label:'Цилиндр'}])}
       </div>
     </div>`;
   }
   html += `</div>`;
 
-  // Recording, storage, etc. (similar to previous but with auto-fix on critical rows)
-  // We'll generate using a generic function but ensure auto-fix button appears
-  function makeRow(id, displayName, subText, extraControls = '', extraSub = '') {
-    const warn = isCritical(id);
-    html += `<div class="item-row ${warn?'warning':''}">
-      <div class="item-row-main">
-        ${checkHTML(id)}
-        <div class="item-info"><div class="item-name">${displayName}</div><div class="item-sub">${subText}</div></div>
-        ${extraControls}
-        ${qtyHTML(id)}
-        ${warn?'<span class="warn-badge" onclick="autoFixCriticals()">⚠️</span>':''}
-      </div>
-      ${extraSub}
+  // Регистрация
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('recording')">
+      <span class="section-icon">🖥</span>
+      <span class="section-title">Регистрация</span>
+      <span class="section-chevron ${state.openSections.recording ? 'open' : ''}">▼</span>
     </div>`;
-  }
-
-  // Recording
-  if (state.tech === 'ip') {
-    renderSection('recording','Регистрация','🖥',['nvr'], () => {
-      let extra = selectHTML('nvr','spec',['4 кан.','8 кан.','16 кан.','32 кан.'],'82px');
-      let sub = `<div class="item-row-sub"><span class="sub-label">Тип NVR:</span>${pillHTML('nvr','nvrType',[{val:'std',label:'Стандарт'},{val:'poe',label:'Встр. PoE'}])}</div>`;
-      makeRow('nvr','NVR','Каналы · Тип', extra, sub);
-      return html.slice(-1); // hack
-    });
-  } else {
-    renderSection('recording','Регистрация','🖥',['xvr'], () => {
-      makeRow('xvr','XVR','Количество каналов', selectHTML('xvr','spec',['4 кан.','8 кан.','16 кан.','32 кан.'],'82px'), '');
-      return '';
-    });
-  }
-
-  // Storage
-  renderSection('storage','Хранение','💾',['hdd'], () => {
-    makeRow('hdd','HDD жёсткий диск','Объём', selectHTML('hdd','spec',['1TB','2TB','4TB','6TB'],'72px'), '');
-    return '';
-  });
-
-  // Power
-  if (state.tech === 'ip') {
-    renderSection('power','Питание и коммутация','⚡',['poe'], () => {
-      makeRow('poe','PoE-коммутатор','Количество портов', selectHTML('poe','spec',['4 порта','8 портов','16 портов','24 порта'],'90px'), '');
-      return '';
-    });
-  } else {
-    renderSection('power','Питание и коммутация','⚡',['psu','bnc'], () => {
-      makeRow('psu','Блок питания 12V DC','Суммарный ток', selectHTML('psu','spec',['5A','10A','20A'],'64px'), '');
-      makeRow('bnc','BNC-коннекторы','Компрессионные', '', '');
-      return '';
-    });
-  }
-
-  // Cabling (simplified)
-  renderSection('cabling','Кабельная часть','🔌',['box','rj45','utp','coax','gofra'], () => {
-    makeRow('box','Монтажные коробки','Подрозетники', '', '');
+  if (state.openSections.recording) {
     if (state.tech === 'ip') {
-      makeRow('rj45','Коннекторы RJ-45','Cat5e / Cat6', '', '');
-      makeRow('utp','Кабель UTP','Метры · Среда', qtyHTML('utp'), `<div class="item-row-sub"><span class="sub-label">Среда:</span>${pillHTML('utp','env',[{val:'in',label:'Внутр.'},{val:'out',label:'Улица'}])}</div>`);
+      html += itemRow('nvr', 'NVR', 'Каналы · Тип',
+        selectHTML('nvr', 'spec', ['4 кан.','8 кан.','16 кан.','32 кан.'], '82px'),
+        `<div class="item-row-sub"><span class="sub-label">Тип NVR:</span>${pillHTML('nvr', 'nvrType', [{val:'std',label:'Стандарт'},{val:'poe',label:'Встр. PoE'}])}</div>`
+      );
     } else {
-      makeRow('coax','Кабель коаксиальный','RG-59 · Метры · Среда', qtyHTML('coax'), `<div class="item-row-sub"><span class="sub-label">Среда:</span>${pillHTML('coax','env',[{val:'in',label:'Внутр.'},{val:'out',label:'Улица'}])}</div>`);
+      html += itemRow('xvr', 'XVR', 'Количество каналов', selectHTML('xvr', 'spec', ['4 кан.','8 кан.','16 кан.','32 кан.'], '82px'), '');
     }
-    makeRow('gofra','Гофра защитная','Диаметр · Метры', selectHTML('gofra','dia',['16мм','20мм','25мм'],'66px') + qtyHTML('gofra'), '');
+  }
+  html += `</div>`;
+
+  // Хранение
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('storage')">
+      <span class="section-icon">💾</span>
+      <span class="section-title">Хранение</span>
+      <span class="section-chevron ${state.openSections.storage ? 'open' : ''}">▼</span>
+    </div>`;
+  if (state.openSections.storage) {
+    html += itemRow('hdd', 'HDD жёсткий диск', 'Объём', selectHTML('hdd', 'spec', ['1TB','2TB','4TB','6TB'], '72px'), '');
+  }
+  html += `</div>`;
+
+  // Питание
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('power')">
+      <span class="section-icon">⚡</span>
+      <span class="section-title">Питание и коммутация</span>
+      <span class="section-chevron ${state.openSections.power ? 'open' : ''}">▼</span>
+    </div>`;
+  if (state.openSections.power) {
+    if (state.tech === 'ip') {
+      html += itemRow('poe', 'PoE-коммутатор', 'Количество портов', selectHTML('poe', 'spec', ['4 порта','8 портов','16 портов','24 порта'], '90px'), '');
+    } else {
+      html += itemRow('psu', 'Блок питания 12V DC', 'Суммарный ток', selectHTML('psu', 'spec', ['5A','10A','20A'], '64px'), '');
+      html += itemRow('bnc', 'BNC-коннекторы', 'Компрессионные', '', '');
+    }
+  }
+  html += `</div>`;
+
+  // Кабельная часть
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('cabling')">
+      <span class="section-icon">🔌</span>
+      <span class="section-title">Кабельная часть</span>
+      <span class="section-chevron ${state.openSections.cabling ? 'open' : ''}">▼</span>
+    </div>`;
+  if (state.openSections.cabling) {
+    html += itemRow('box', 'Монтажные коробки', 'Подрозетники', '', '');
+    if (state.tech === 'ip') {
+      html += itemRow('rj45', 'Коннекторы RJ-45', 'Cat5e / Cat6', '', '');
+      html += itemRow('utp', 'Кабель UTP', 'Метры · Среда', qtyHTML('utp'),
+        `<div class="item-row-sub"><span class="sub-label">Среда:</span>${pillHTML('utp', 'env', [{val:'in',label:'Внутр.'},{val:'out',label:'Улица'}])}</div>`
+      );
+    } else {
+      html += itemRow('coax', 'Кабель коаксиальный', 'RG-59 · Метры · Среда', qtyHTML('coax'),
+        `<div class="item-row-sub"><span class="sub-label">Среда:</span>${pillHTML('coax', 'env', [{val:'in',label:'Внутр.'},{val:'out',label:'Улица'}])}</div>`
+      );
+    }
+    html += itemRow('gofra', 'Гофра защитная', 'Диаметр · Метры',
+      selectHTML('gofra', 'dia', ['16мм','20мм','25мм'], '66px') + qtyHTML('gofra'), ''
+    );
     if (ss('gofra').checked) {
       html += `<div class="sub-item-row"><span>↳ Клипсы ${ss('gofra').dia} (автодобавлено)</span><span class="clips-tag">🔗 авто</span><span>${ss('gofra').qty} шт.</span></div>`;
     }
-    return '';
-  });
+  }
+  html += `</div>`;
 
-  // Workstation, Mounting, Custom (similar to previous, but we keep them)
-  // We'll just reuse the same generation but ensure auto-fix button appears on monitor
-  renderSection('workstation','Рабочее место','🖥',['monitor','mouse_ext','hdmi'], () => {
-    makeRow('monitor','Монитор','Диагональ', selectHTML('monitor','spec',['19"','22"','24"','27"'],'64px'), '');
-    makeRow('mouse_ext','Удлинитель мыши','По USB / UTP', '', '');
-    makeRow('hdmi','Кабель HDMI','Длина', selectHTML('hdmi','spec',['1.5м','3м','5м','10м'],'64px'), '');
-    return '';
-  });
+  // Рабочее место
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('workstation')">
+      <span class="section-icon">🖥</span>
+      <span class="section-title">Рабочее место</span>
+      <span class="section-chevron ${state.openSections.workstation ? 'open' : ''}">▼</span>
+    </div>`;
+  if (state.openSections.workstation) {
+    html += itemRow('monitor', 'Монитор', 'Диагональ', selectHTML('monitor', 'spec', ['19"','22"','24"','27"'], '64px'), '');
+    html += itemRow('mouse_ext', 'Удлинитель мыши', 'По USB / UTP', '', '');
+    html += itemRow('hdmi', 'Кабель HDMI', 'Длина', selectHTML('hdmi', 'spec', ['1.5м','3м','5м','10м'], '64px'), '');
+  }
+  html += `</div>`;
 
-  renderSection('mounting','Монтаж','🔧',['brackets','shelves','fasteners'], () => {
-    makeRow('brackets','Кронштейны','Тип крепления', qtyHTML('brackets'), `<div class="item-row-sub"><span class="sub-label">Тип:</span>${pillHTML('brackets','btype',[{val:'wall',label:'Настенный'},{val:'pole',label:'На столб'},{val:'corner',label:'Угловой'}])}</div>`);
-    makeRow('shelves','Полки под оборудование','Для шкафа / стойки', '', '');
-    makeRow('fasteners','Дюбели и саморезы','Монтажный комплект', '', '');
-    return '';
-  });
+  // Монтаж
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('mounting')">
+      <span class="section-icon">🔧</span>
+      <span class="section-title">Монтаж</span>
+      <span class="section-chevron ${state.openSections.mounting ? 'open' : ''}">▼</span>
+    </div>`;
+  if (state.openSections.mounting) {
+    html += itemRow('brackets', 'Кронштейны', 'Тип крепления', qtyHTML('brackets'),
+      `<div class="item-row-sub"><span class="sub-label">Тип:</span>${pillHTML('brackets', 'btype', [{val:'wall',label:'Настенный'},{val:'pole',label:'На столб'},{val:'corner',label:'Угловой'}])}</div>`
+    );
+    html += itemRow('shelves', 'Полки под оборудование', 'Для шкафа / стойки', '', '');
+    html += itemRow('fasteners', 'Дюбели и саморезы', 'Монтажный комплект', '', '');
+  }
+  html += `</div>`;
 
-  // Custom
-  renderSection('custom','Дополнительно','➕',state.custom.map((_,i)=>`custom_${i}`), () => {
+  // Дополнительно
+  html += `<div class="section">
+    <div class="section-header" onclick="toggleSec('custom')">
+      <span class="section-icon">➕</span>
+      <span class="section-title">Дополнительно</span>
+      <span class="section-chevron ${state.openSections.custom ? 'open' : ''}">▼</span>
+    </div>`;
+  if (state.openSections.custom) {
     state.custom.forEach((item, idx) => {
       html += `<div class="item-row">
         <div class="item-row-main">
           <label class="check-wrap">
-            <input type="checkbox" ${item.checked?'checked':''} onchange="chkCustom(${idx},this.checked)">
+            <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="chkCustom(${idx}, this.checked)">
             <div class="check-box"><span class="check-mark">✓</span></div>
           </label>
           <div class="item-info">
-            <input type="text" class="custom-name-input" value="${escapeHtml(item.name)}" onchange="renameCustom(${idx},this.value)">
+            <input type="text" class="custom-name-input" value="${escapeHtml(item.name)}" onchange="renameCustom(${idx}, this.value)">
           </div>
-          <input type="number" class="qty-input" min="1" max="9999" value="${item.qty}" oninput="qtyCustom(${idx},this.value)">
+          <input type="number" class="qty-input" min="1" max="9999" value="${item.qty}" oninput="qtyCustom(${idx}, this.value)">
           <button class="btn-del" onclick="delCustom(${idx})">✕</button>
         </div>
       </div>`;
     });
     html += `<div class="add-custom"><div class="add-row"><input type="text" id="add-input" placeholder="Название позиции..."><button class="btn-add" onclick="addCustom()">+ Добавить</button></div></div>`;
-    return '';
-  });
+  }
+  html += `</div>`;
 
   main.innerHTML = html;
   document.getElementById('projectNotes').addEventListener('input', (e) => {
     state.notes = e.target.value;
     saveToStorage();
   });
-  // sync camera quantity input
-  const camInput = document.getElementById('camQtyInput');
-  if (camInput) camInput.value = ss('cam').qty;
   updateStats();
 }
 
-function updateStats() {
-  const items = getCheckedItems();
-  const bar = document.getElementById('stats-bar');
-  bar.textContent = items.length ? `${items.length} поз. отмечено · готово к отправке` : 'нет отмеченных позиций';
+function itemRow(id, name, sub, extraControls = '', extraSub = '') {
+  const warn = isCritical(id);
+  return `<div class="item-row ${warn ? 'warning' : ''}">
+    <div class="item-row-main">
+      ${checkboxHTML(id)}
+      <div class="item-info">
+        <div class="item-name">${escapeHtml(name)}</div>
+        <div class="item-sub">${escapeHtml(sub)}</div>
+      </div>
+      ${extraControls}
+      ${qtyHTML(id)}
+      ${warn ? '<span class="warn-badge" onclick="autoFixCriticals()">⚠️</span>' : ''}
+    </div>
+    ${extraSub}
+  </div>`;
 }
 
-// Helper functions for controls
-function checkHTML(id) { return `<label class="check-wrap"><input type="checkbox" ${ss(id).checked?'checked':''} onchange="chkItem('${id}',this.checked)"><div class="check-box"><span class="check-mark">✓</span></div></label>`; }
-function selectHTML(id, field, opts, width) { const cur = ss(id)[field]; let h = `<select class="spec-select" style="width:${width||'auto'}" onchange="setField('${id}','${field}',this.value)">`; opts.forEach(o => h += `<option value="${o}" ${cur===o?'selected':''}>${o}</option>`); h += `</select>`; return h; }
-function pillHTML(id, field, opts) { const cur = ss(id)[field]; let h = `<div class="pill-toggle">`; opts.forEach(o => h += `<button class="pill-btn ${cur===o.val?'active':''}" onclick="setField('${id}','${field}','${o.val}')">${o.label}</button>`); h += `</div>`; return h; }
-function qtyHTML(id) { return `<input type="number" class="qty-input" min="1" max="9999" value="${ss(id).qty}" oninput="setQty('${id}',this.value)">`; }
+function checkboxHTML(id) {
+  return `<label class="check-wrap">
+    <input type="checkbox" ${ss(id).checked ? 'checked' : ''} onchange="chkItem('${id}', this.checked)">
+    <div class="check-box"><span class="check-mark">✓</span></div>
+  </label>`;
+}
+
+function selectHTML(id, field, opts, width) {
+  const cur = ss(id)[field];
+  let h = `<select class="spec-select" style="width:${width||'auto'}" onchange="setField('${id}','${field}',this.value)">`;
+  opts.forEach(o => h += `<option value="${o}" ${cur===o ? 'selected' : ''}>${o}</option>`);
+  h += `</select>`;
+  return h;
+}
+
+function pillHTML(id, field, opts) {
+  const cur = ss(id)[field];
+  let h = `<div class="pill-toggle">`;
+  opts.forEach(o => h += `<button class="pill-btn ${cur===o.val ? 'active' : ''}" onclick="setField('${id}','${field}','${o.val}')">${o.label}</button>`);
+  h += `</div>`;
+  return h;
+}
+
+function qtyHTML(id) {
+  return `<input type="number" class="qty-input" min="1" max="9999" value="${ss(id).qty}" oninput="setQty('${id}', this.value)">`;
+}
 
 function chkItem(id, v) { ss(id).checked = v; saveToStorage(); render(); }
 function setField(id, field, val) { ss(id)[field] = val; saveToStorage(); render(); }
 function setQty(id, v) { ss(id).qty = Math.max(1, parseInt(v)||1); saveToStorage(); render(); }
 function toggleSec(key) { state.openSections[key] = !state.openSections[key]; saveToStorage(); render(); }
 
-function addCustom() { const inp = document.getElementById('add-input'); const name = inp.value.trim(); if (!name) return; state.custom.push({ name, qty:1, checked:true }); saveToStorage(); render(); }
+function addCustom() {
+  const inp = document.getElementById('add-input');
+  const name = inp.value.trim();
+  if (!name) return;
+  state.custom.push({ name, qty: 1, checked: true });
+  saveToStorage();
+  render();
+}
 function delCustom(idx) { state.custom.splice(idx,1); saveToStorage(); render(); }
 function chkCustom(idx, v) { state.custom[idx].checked = v; saveToStorage(); updateStats(); }
 function renameCustom(idx, v) { state.custom[idx].name = v; saveToStorage(); }
-function qtyCustom(idx, v) { state.custom[idx].qty = Math.max(1,parseInt(v)||1); saveToStorage(); }
+function qtyCustom(idx, v) { state.custom[idx].qty = Math.max(1, parseInt(v)||1); saveToStorage(); }
 
-// Export
 function getCheckedItems() {
   const result = [];
   const s = state.sections;
@@ -915,10 +1031,28 @@ function exportOrder() {
   else fallbackCopy(txt);
 }
 
-function fallbackCopy(txt) { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast('✓ Заказ скопирован!'); }
-function showToast(msg, color) { const t = document.getElementById('toast'); t.textContent = msg; t.style.background = color||'var(--success)'; t.style.color = color?'#fff':'#000'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+function fallbackCopy(txt) {
+  const ta = document.createElement('textarea');
+  ta.value = txt; document.body.appendChild(ta); ta.select();
+  document.execCommand('copy'); document.body.removeChild(ta);
+  showToast('✓ Заказ скопирован!');
+}
 
-// Tech switch
+function showToast(msg, color) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || 'var(--success)';
+  t.style.color = color ? '#fff' : '#000';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function updateStats() {
+  const items = getCheckedItems();
+  const bar = document.getElementById('stats-bar');
+  bar.textContent = items.length ? `${items.length} поз. отмечено · готово к отправке` : 'нет отмеченных позиций';
+}
+
 function setTech(t) {
   state.tech = t;
   autoFixCriticals();
@@ -928,28 +1062,14 @@ function setTech(t) {
   document.getElementById('btn-hdcvi').classList.toggle('active', t==='hdcvi');
 }
 
-function clearAll() {
-  const modalDiv = document.getElementById('modal');
-  modalDiv.innerHTML = `<div class="modal"><h3>⚠ Очистить всё?</h3><p>Все данные текущего объекта будут сброшены. Это действие нельзя отменить.</p><div class="modal-btns"><button class="btn-cancel" onclick="closeModal()">Отмена</button><button class="btn-confirm-clear" onclick="confirmClear()">Очистить</button></div></div>`;
-  modalDiv.style.display = 'flex';
-}
-function confirmClear() {
-  state.sections = defaultSections();
-  state.custom = [];
-  state.notes = '';
-  autoFixCriticals();
-  saveToStorage();
-  closeModal();
-  render();
-}
-function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-// Init
+// ==================== INIT ====================
 loadFromStorage();
 document.getElementById('btn-ip').classList.toggle('active', state.tech==='ip');
 document.getElementById('btn-hdcvi').classList.toggle('active', state.tech==='hdcvi');
 document.getElementById('exportBtn').onclick = exportOrder;
-document.getElementById('clearBtn').onclick = clearAll;
+document.getElementById('clearBtn').onclick = openClearModal;
 window.setTech = setTech;
 window.changeCameraQty = changeCameraQty;
 window.autoFixCriticals = autoFixCriticals;
@@ -957,8 +1077,16 @@ window.applyTemplate = applyTemplate;
 window.showProjectDialog = showProjectDialog;
 window.closeModal = closeModal;
 window.confirmClear = confirmClear;
-window.chkItem = chkItem; window.setField = setField; window.setQty = setQty; window.toggleSec = toggleSec;
-window.addCustom = addCustom; window.delCustom = delCustom; window.chkCustom = chkCustom; window.renameCustom = renameCustom; window.qtyCustom = qtyCustom;
+window.switchToProject = switchToProject;
+window.chkItem = chkItem;
+window.setField = setField;
+window.setQty = setQty;
+window.toggleSec = toggleSec;
+window.addCustom = addCustom;
+window.delCustom = delCustom;
+window.chkCustom = chkCustom;
+window.renameCustom = renameCustom;
+window.qtyCustom = qtyCustom;
 render();
 </script>
 </body>
