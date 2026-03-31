@@ -44,6 +44,7 @@
             transition: background 0.2s, color 0.2s;
             font-size: 16px;
             -webkit-text-size-adjust: 100%;
+            padding-bottom: 90px;
         }
         .app-header {
             position: sticky;
@@ -98,7 +99,7 @@
         .container {
             max-width: 700px;
             margin: 0 auto;
-            padding: 16px 16px 100px;
+            padding: 16px 16px 20px;
         }
         .project-bar {
             background: var(--surface);
@@ -313,7 +314,7 @@
         }
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--success);
@@ -342,6 +343,29 @@
             border-radius: 12px;
             margin: 8px 0;
         }
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        .bottom-bar .container {
+            padding: 0;
+        }
+        .bottom-bar .btn-primary {
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -358,6 +382,12 @@
 </header>
 
 <div class="container" id="appRoot"></div>
+
+<div class="bottom-bar" id="bottomBar">
+    <div class="container">
+        <button class="btn-primary" id="exportOrderBtnBottom">📋 Сформировать заказ</button>
+    </div>
+</div>
 
 <script>
     // --------------------------------------------------------------
@@ -686,11 +716,13 @@
     function showHistoryView() {
         activeView = "history";
         render();
+        document.getElementById("bottomBar").style.display = "none";
     }
 
     function showObjectView() {
         activeView = "object";
         render();
+        document.getElementById("bottomBar").style.display = "block";
     }
 
     function renderHistory() {
@@ -712,7 +744,7 @@
     }
 
     // --------------------------------------------------------------
-    //  RENDER OBJECT VIEW (complete)
+    //  RENDER OBJECT VIEW
     // --------------------------------------------------------------
     function renderObject() {
         updateAutoValues();
@@ -731,7 +763,6 @@
                     <button class="btn-sm ${tech === "ip" ? "active" : ""}" id="techIpBtn">IP</button>
                     <button class="btn-sm ${tech === "hdcvi" ? "active" : ""}" id="techHdcviBtn">HDCVI</button>
                 </div>
-                <button class="btn-sm" id="exportOrderBtn">📋 Заказ</button>
             </div>
             <div class="card"><div class="card-content"><textarea id="notesField" placeholder="Заметки по объекту..." rows="2">${escapeHtml(state.notes)}</textarea></div></div>
         `;
@@ -911,7 +942,6 @@
         document.getElementById("resetProjectBtn")?.addEventListener("click", resetCurrentProject);
         document.getElementById("techIpBtn")?.addEventListener("click", () => switchTech("ip"));
         document.getElementById("techHdcviBtn")?.addEventListener("click", () => switchTech("hdcvi"));
-        document.getElementById("exportOrderBtn")?.addEventListener("click", showExportModal);
         document.getElementById("notesField")?.addEventListener("input", (e) => { state.notes = e.target.value; saveState(); });
 
         // toggle sections
@@ -1176,7 +1206,9 @@
         document.body.classList.toggle("dark");
         saveState();
     });
+    document.getElementById("exportOrderBtnBottom")?.addEventListener("click", showExportModal);
     render();
+    showObjectView(); // ensure bottom bar visible
 </script>
 </body>
 </html>
