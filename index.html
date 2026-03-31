@@ -12,7 +12,6 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-
         :root {
             --bg: #f8fafc;
             --surface: #ffffff;
@@ -26,7 +25,6 @@
             --success: #10b981;
             --shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-
         body.dark {
             --bg: #0f172a;
             --surface: #1e293b;
@@ -38,7 +36,6 @@
             --accent2: #fb923c;
             --shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
-
         body {
             background: var(--bg);
             color: var(--text);
@@ -48,8 +45,6 @@
             font-size: 16px;
             -webkit-text-size-adjust: 100%;
         }
-
-        /* header */
         .app-header {
             position: sticky;
             top: 0;
@@ -100,15 +95,11 @@
             font-size: 18px;
             line-height: 1;
         }
-
-        /* container */
         .container {
             max-width: 700px;
             margin: 0 auto;
             padding: 16px 16px 100px;
         }
-
-        /* project bar */
         .project-bar {
             background: var(--surface);
             border-radius: 24px;
@@ -127,13 +118,6 @@
             align-items: center;
             gap: 8px;
         }
-        .project-name i {
-            color: var(--accent);
-        }
-        .project-actions {
-            display: flex;
-            gap: 8px;
-        }
         .btn-sm {
             background: var(--surface2);
             border: 1px solid var(--border);
@@ -143,8 +127,6 @@
             font-weight: 500;
             cursor: pointer;
         }
-
-        /* cards */
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -204,7 +186,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.1s;
         }
         .check-wrap input:checked + .check-box {
             background: var(--success);
@@ -270,24 +251,11 @@
             width: 100%;
             text-align: center;
         }
-        .warning {
-            border-left: 4px solid var(--danger);
-            background: rgba(239,68,68,0.05);
-        }
-        .badge-warn {
-            color: var(--danger);
-            font-weight: bold;
-            font-size: 18px;
-            margin-left: 6px;
-        }
         .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .mt-2 { margin-top: 8px; }
-
-        /* modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -392,7 +360,9 @@
 <div class="container" id="appRoot"></div>
 
 <script>
-    // ------------------- DATA -------------------
+    // --------------------------------------------------------------
+    //  STATE
+    // --------------------------------------------------------------
     let state = {
         projects: {},
         currentProject: "default",
@@ -409,7 +379,7 @@
         corrugation: { dia: "20mm", color: "серая", qty: 50, checked: false },
         clips: { dia: "20mm", qty: 50, checked: false, kind: "clips" },
         padsStrap: { size: "2.5x150", qty: 50, checked: false },
-        junctionBoxes: { size: "100x100x50", customSize: "", qty: 1, checked: false },
+        junctionBoxes: { size: "100x100x50", customSize: "", qty: 1, checked: false, auto: true },
         connectors: { qty: 20, checked: false, auto: true },
         brackets: [{ btype: "wall", qty: 1, checked: true }],
         shelves: { qty: 1, checked: false },
@@ -422,12 +392,14 @@
     };
 
     let historyOrders = JSON.parse(localStorage.getItem("vp_history") || "[]");
-    let activeView = "object"; // object or history
+    let activeView = "object";
     let sectionsOpen = {
         cameras: true, recorder: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true
     };
 
-    // Helper functions
+    // --------------------------------------------------------------
+    //  HELPERS
+    // --------------------------------------------------------------
     function saveState() {
         let projData = {
             tech: state.tech,
@@ -495,7 +467,7 @@
             corrugation: { dia: "20mm", color: "серая", qty: 50, checked: false },
             clips: { dia: "20mm", qty: 50, checked: false, kind: "clips" },
             padsStrap: { size: "2.5x150", qty: 50, checked: false },
-            junctionBoxes: { size: "100x100x50", customSize: "", qty: 1, checked: false },
+            junctionBoxes: { size: "100x100x50", customSize: "", qty: 1, checked: false, auto: true },
             connectors: { qty: 20, checked: false, auto: true },
             brackets: [{ btype: "wall", qty: 1, checked: true }],
             shelves: { qty: 1, checked: false },
@@ -516,7 +488,7 @@
         let camCount = totalCameras();
         if (state.connectors.auto) state.connectors.qty = camCount * 2 + 5;
         if (state.tech === "hdcvi" && state.baluns.auto) state.baluns.qty = camCount * 2 + 5;
-        if (state.junctionBoxes.auto !== false) state.junctionBoxes.qty = camCount;
+        if (state.junctionBoxes.auto) state.junctionBoxes.qty = camCount;
     }
 
     function updateClipsFromCorrugation() {
@@ -528,7 +500,18 @@
         }
     }
 
-    // ----- dynamic arrays management -----
+    function showToast(msg) {
+        let toast = document.getElementById("toastMsg");
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2000);
+    }
+
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    // --------------------------------------------------------------
+    //  DYNAMIC ARRAYS
+    // --------------------------------------------------------------
     function addCamera() { state.cameras.push({ type: "dome", resolution: "4MP", qty: 1, checked: true }); saveState(); render(); }
     function removeCamera(idx) { state.cameras.splice(idx,1); saveState(); render(); }
     function addPowerDevice() { state.powerDevices.push({ spec: state.tech === "ip" ? "8 портов" : "10A", qty: 1, checked: true }); saveState(); render(); }
@@ -537,14 +520,14 @@
     function removeBracket(idx) { state.brackets.splice(idx,1); saveState(); render(); }
     function addCustomItem() { let name = prompt("Название позиции:"); if (name) { state.custom.push({ name, qty: 1, checked: true }); saveState(); render(); } }
     function removeCustom(idx) { state.custom.splice(idx,1); saveState(); render(); }
+    function addRecorder() { state.recorders.push({ spec: "8 кан.", nvrType: "std", qty: 1, checked: true }); saveState(); render(); }
+    function removeRecorder(idx) { state.recorders.splice(idx,1); saveState(); render(); }
+    function addStorage() { state.storage.push({ spec: "2TB", qty: 1, checked: true }); saveState(); render(); }
+    function removeStorage(idx) { state.storage.splice(idx,1); saveState(); render(); }
 
-    function resetCurrentProject() {
-        let fresh = getEmptyProject();
-        Object.assign(state, fresh);
-        saveState();
-        render();
-    }
-
+    // --------------------------------------------------------------
+    //  TECH SWITCH, RESET, PROJECTS
+    // --------------------------------------------------------------
     function switchTech(tech) {
         if (state.tech === tech) return;
         state.tech = tech;
@@ -555,6 +538,13 @@
             if (!state.xvr) state.xvr = { spec: "8 кан.", qty: 1, checked: true };
             if (!state.powerDevices.length) state.powerDevices = [{ spec: "10A", qty: 1, checked: true }];
         }
+        saveState();
+        render();
+    }
+
+    function resetCurrentProject() {
+        let fresh = getEmptyProject();
+        Object.assign(state, fresh);
         saveState();
         render();
     }
@@ -600,6 +590,9 @@
         modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
     }
 
+    // --------------------------------------------------------------
+    //  EXPORT & HISTORY
+    // --------------------------------------------------------------
     function generateOrderText() {
         let lines = [];
         lines.push("📋 *ЗАЯВКА*");
@@ -687,6 +680,9 @@
         modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
     }
 
+    // --------------------------------------------------------------
+    //  VIEWS
+    // --------------------------------------------------------------
     function showHistoryView() {
         activeView = "history";
         render();
@@ -715,16 +711,174 @@
         `).join("");
     }
 
-    function render() {
+    // --------------------------------------------------------------
+    //  RENDER OBJECT VIEW (complete)
+    // --------------------------------------------------------------
+    function renderObject() {
         updateAutoValues();
         updateClipsFromCorrugation();
+        let tech = state.tech;
+        let html = `
+            <div class="project-bar">
+                <div class="project-name"><i class="fas fa-building"></i> ${escapeHtml(state.currentProject)}</div>
+                <div class="project-actions">
+                    <button class="btn-sm" id="switchProjectBtn">Сменить</button>
+                    <button class="btn-sm" id="resetProjectBtn">Очистить</button>
+                </div>
+            </div>
+            <div class="flex-between" style="margin-bottom:12px">
+                <div style="display:flex; gap:8px; background:var(--surface); padding:4px; border-radius:40px; border:1px solid var(--border)">
+                    <button class="btn-sm ${tech === "ip" ? "active" : ""}" id="techIpBtn">IP</button>
+                    <button class="btn-sm ${tech === "hdcvi" ? "active" : ""}" id="techHdcviBtn">HDCVI</button>
+                </div>
+                <button class="btn-sm" id="exportOrderBtn">📋 Заказ</button>
+            </div>
+            <div class="card"><div class="card-content"><textarea id="notesField" placeholder="Заметки по объекту..." rows="2">${escapeHtml(state.notes)}</textarea></div></div>
+        `;
+
+        // Камеры
+        html += `<div class="card"><div class="card-header" data-section="cameras">📷 Камеры <i class="fas fa-chevron-down ${sectionsOpen.cameras ? "open" : ""}"></i></div><div class="card-content" id="camerasContent" style="display:${sectionsOpen.cameras ? "block" : "none"}">`;
+        state.cameras.forEach((cam, idx) => {
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" data-cam-check="${idx}" ${cam.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">Камера</div><div class="item-desc">${cam.type === "dome" ? "Купол" : "Цилиндр"} · ${cam.resolution}</div></div>
+                <div class="controls">
+                    <select data-cam-type="${idx}"><option value="dome" ${cam.type==="dome"?"selected":""}>Купол</option><option value="bullet" ${cam.type==="bullet"?"selected":""}>Цилиндр</option></select>
+                    <select data-cam-res="${idx}"><option value="2MP">2MP</option><option value="4MP" ${cam.resolution==="4MP"?"selected":""}>4MP</option><option value="5MP">5MP</option><option value="8MP">8MP</option></select>
+                    <input type="number" class="qty-input" value="${cam.qty}" data-cam-qty="${idx}">
+                    <button class="btn-icon" data-remove-cam="${idx}"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        });
+        html += `<button class="btn-add-row" id="addCamBtn">+ Добавить камеру</button></div></div>`;
+
+        // Регистратор
+        html += `<div class="card"><div class="card-header" data-section="recorder">${tech==="ip" ? "🖥 NVR" : "🖥 XVR"} <i class="fas fa-chevron-down ${sectionsOpen.recorder ? "open" : ""}"></i></div><div class="card-content" id="recorderContent" style="display:${sectionsOpen.recorder ? "block" : "none"}">`;
+        if (tech === "ip") {
+            state.recorders.forEach((rec, idx) => {
+                html += `<div class="item-row">
+                    <div class="check-wrap"><input type="checkbox" data-rec-check="${idx}" ${rec.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                    <div class="item-info"><div class="item-name">NVR</div><div class="item-desc">${rec.spec}</div></div>
+                    <div class="controls">
+                        <select data-rec-spec="${idx}"><option value="4 кан.">4 кан.</option><option value="8 кан." ${rec.spec==="8 кан."?"selected":""}>8 кан.</option><option value="16 кан.">16 кан.</option><option value="32 кан.">32 кан.</option></select>
+                        <select data-rec-type="${idx}"><option value="std" ${rec.nvrType==="std"?"selected":""}>Стандарт</option><option value="poe" ${rec.nvrType==="poe"?"selected":""}>Встр. PoE</option></select>
+                        <input type="number" class="qty-input" value="${rec.qty}" data-rec-qty="${idx}">
+                        <button class="btn-icon" data-remove-rec="${idx}"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`;
+            });
+            html += `<button class="btn-add-row" id="addRecBtn">+ Добавить NVR</button>`;
+        } else {
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" id="xvrCheck" ${state.xvr.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">XVR</div><div class="item-desc">${state.xvr.spec}</div></div>
+                <div class="controls">
+                    <select id="xvrSpec"><option value="4 кан.">4 кан.</option><option value="8 кан." ${state.xvr.spec==="8 кан."?"selected":""}>8 кан.</option><option value="16 кан.">16 кан.</option><option value="32 кан.">32 кан.</option></select>
+                    <input type="number" class="qty-input" id="xvrQty" value="${state.xvr.qty}">
+                </div>
+            </div>`;
+        }
+        html += `</div></div>`;
+
+        // Хранение
+        html += `<div class="card"><div class="card-header" data-section="storage">💾 Хранение <i class="fas fa-chevron-down ${sectionsOpen.storage ? "open" : ""}"></i></div><div class="card-content" id="storageContent" style="display:${sectionsOpen.storage ? "block" : "none"}">`;
+        state.storage.forEach((item, idx) => {
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" data-storage-check="${idx}" ${item.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">HDD</div><div class="item-desc">${item.spec}</div></div>
+                <div class="controls">
+                    <select data-storage-spec="${idx}"><option value="1TB">1TB</option><option value="2TB" ${item.spec==="2TB"?"selected":""}>2TB</option><option value="4TB">4TB</option><option value="6TB">6TB</option></select>
+                    <input type="number" class="qty-input" value="${item.qty}" data-storage-qty="${idx}">
+                    <button class="btn-icon" data-remove-storage="${idx}"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        });
+        html += `<button class="btn-add-row" id="addStorageBtn">+ Добавить HDD</button></div></div>`;
+
+        // Питание
+        html += `<div class="card"><div class="card-header" data-section="power">⚡ Питание и коммутация <i class="fas fa-chevron-down ${sectionsOpen.power ? "open" : ""}"></i></div><div class="card-content" id="powerContent" style="display:${sectionsOpen.power ? "block" : "none"}">`;
+        state.powerDevices.forEach((p, idx) => {
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" data-power-check="${idx}" ${p.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">${tech==="ip" ? "PoE-коммутатор" : "Блок питания"}</div><div class="item-desc">${p.spec}</div></div>
+                <div class="controls">
+                    <select data-power-spec="${idx}">${tech==="ip" ? `<option value="4 порта">4 порта</option><option value="8 портов" ${p.spec==="8 портов"?"selected":""}>8 портов</option><option value="16 портов">16 портов</option><option value="24 порта">24 порта</option>` : `<option value="5A">5A</option><option value="10A" ${p.spec==="10A"?"selected":""}>10A</option><option value="20A">20A</option>`}</select>
+                    <input type="number" class="qty-input" value="${p.qty}" data-power-qty="${idx}">
+                    <button class="btn-icon" data-remove-power="${idx}"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        });
+        html += `<button class="btn-add-row" id="addPowerBtn">+ Добавить</button>`;
+        if (tech === "hdcvi") {
+            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="bncCheck" ${state.bnc.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">BNC-коннекторы</div><div class="item-desc">компрессионные</div></div><div class="controls"><input type="number" class="qty-input" id="bncQty" value="${state.bnc.qty}"></div></div>`;
+            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="balunsCheck" ${state.baluns.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Балуны (пассивные)</div><div class="item-desc">авторасчёт</div></div><div class="controls"><input type="number" class="qty-input" id="balunsQty" value="${state.baluns.qty}"></div></div>`;
+        }
+        html += `</div></div>`;
+
+        // Кабельная часть
+        html += `<div class="card"><div class="card-header" data-section="cabling">🔌 Кабельная часть <i class="fas fa-chevron-down ${sectionsOpen.cabling ? "open" : ""}"></i></div><div class="card-content" id="cablingContent" style="display:${sectionsOpen.cabling ? "block" : "none"}">`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="cableCheck" ${state.cable.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Кабель</div><div class="item-desc">тип, среда</div></div><div class="controls"><select id="cableType"><option value="UTP" ${state.cable.type==="UTP"?"selected":""}>UTP</option><option value="F/UTP" ${state.cable.type==="F/UTP"?"selected":""}>F/UTP</option></select><select id="cableEnv"><option value="in" ${state.cable.env==="in"?"selected":""}>Внутренний</option><option value="out" ${state.cable.env==="out"?"selected":""}>Уличный</option></select><input type="number" class="qty-input" id="cableQty" value="${state.cable.qty}"></div></div>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="corrCheck" ${state.corrugation.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Гофра ПНД</div><div class="item-desc">диаметр, цвет</div></div><div class="controls"><select id="corrDia"><option value="16mm" ${state.corrugation.dia==="16mm"?"selected":""}>16мм</option><option value="20mm" ${state.corrugation.dia==="20mm"?"selected":""}>20мм</option><option value="25mm" ${state.corrugation.dia==="25mm"?"selected":""}>25мм</option><option value="32mm" ${state.corrugation.dia==="32mm"?"selected":""}>32мм</option></select><select id="corrColor"><option value="серая" ${state.corrugation.color==="серая"?"selected":""}>серая</option><option value="черная" ${state.corrugation.color==="черная"?"selected":""}>черная</option><option value="белая" ${state.corrugation.color==="белая"?"selected":""}>белая</option></select><input type="number" class="qty-input" id="corrQty" value="${state.corrugation.qty}"></div></div>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="clipsCheck" ${state.clips.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Клипсы/Площадки</div><div class="item-desc">для гофры (упак. 50 шт)</div></div><div class="controls"><select id="clipsKind"><option value="clips" ${state.clips.kind==="clips"?"selected":""}>Клипсы</option><option value="pads" ${state.clips.kind==="pads"?"selected":""}>Площадки</option></select><input type="number" class="qty-input" id="clipsQty" value="${state.clips.qty}"></div></div>`;
+        if (state.clips.kind === "pads") {
+            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="strapCheck" ${state.padsStrap.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Стяжки/хомуты</div><div class="item-desc">${state.padsStrap.size}</div></div><div class="controls"><input type="number" class="qty-input" id="strapQty" value="${state.padsStrap.qty}"></div></div>`;
+        }
+        html += `</div></div>`;
+
+        // Рабочее место
+        html += `<div class="card"><div class="card-header" data-section="workstation">🖥 Рабочее место <i class="fas fa-chevron-down ${sectionsOpen.workstation ? "open" : ""}"></i></div><div class="card-content" id="workstationContent" style="display:${sectionsOpen.workstation ? "block" : "none"}">`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="monitorCheck" ${state.monitor.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Монитор</div><div class="item-desc">диагональ</div></div><div class="controls"><select id="monitorSpec"><option value="16\"">16"</option><option value="19\"">19"</option><option value="22\"">22"</option><option value="24\"" ${state.monitor.spec==="24\""?"selected":""}>24"</option><option value="27\"">27"</option><option value="32\"">32"</option></select><input type="number" class="qty-input" id="monitorQty" value="${state.monitor.qty}"></div></div>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="hdmiCheck" ${state.hdmi.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Кабель HDMI</div><div class="item-desc">длина</div></div><div class="controls"><select id="hdmiSpec"><option value="1.5м">1.5м</option><option value="3м" ${state.hdmi.spec==="3м"?"selected":""}>3м</option><option value="5м">5м</option><option value="10м">10м</option><option value="15м">15м</option><option value="20м">20м</option><option value="30м">30м</option><option value="50м">50м</option></select><input type="number" class="qty-input" id="hdmiQty" value="${state.hdmi.qty}"></div></div>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="vgaCheck" ${state.vga.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Кабель VGA</div><div class="item-desc">длина</div></div><div class="controls"><select id="vgaSpec"><option value="1.5м">1.5м</option><option value="3м" ${state.vga.spec==="3м"?"selected":""}>3м</option><option value="5м">5м</option><option value="10м">10м</option><option value="15м">15м</option><option value="20м">20м</option><option value="30м">30м</option><option value="50м">50м</option></select><input type="number" class="qty-input" id="vgaQty" value="${state.vga.qty}"></div></div>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="injectorCheck" ${state.injector.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Инжектор (разветвитель)</div><div class="item-desc">выходы</div></div><div class="controls"><select id="injectorOutputs"><option value="2">2 выхода</option><option value="3" ${state.injector.outputs===3?"selected":""}>3 выхода</option><option value="4">4 выхода</option></select><input type="number" class="qty-input" id="injectorQty" value="${state.injector.qty}"></div></div>`;
+        html += `</div></div>`;
+
+        // Монтаж
+        html += `<div class="card"><div class="card-header" data-section="mounting">🔧 Монтаж <i class="fas fa-chevron-down ${sectionsOpen.mounting ? "open" : ""}"></i></div><div class="card-content" id="mountingContent" style="display:${sectionsOpen.mounting ? "block" : "none"}">`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="jboxCheck" ${state.junctionBoxes.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Распределительные коробки</div><div class="item-desc">размер</div></div><div class="controls"><select id="jboxSize"><option value="100x100x50" ${state.junctionBoxes.size==="100x100x50"?"selected":""}>100x100x50</option><option value="150x150x70" ${state.junctionBoxes.size==="150x150x70"?"selected":""}>150x150x70</option><option value="200x200x80" ${state.junctionBoxes.size==="200x200x80"?"selected":""}>200x200x80</option><option value="custom">Свой размер</option></select><input type="text" id="jboxCustom" placeholder="введите размер" value="${escapeHtml(state.junctionBoxes.customSize)}" style="display:${state.junctionBoxes.size==="custom"?"inline-block":"none"}; width:110px;"><input type="number" class="qty-input" id="jboxQty" value="${state.junctionBoxes.qty}"></div></div>`;
+        if (tech === "ip") {
+            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="connectorsCheck" ${state.connectors.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Коннекторы RJ-45</div><div class="item-desc">авторасчёт (камеры×2+5)</div></div><div class="controls"><input type="number" class="qty-input" id="connectorsQty" value="${state.connectors.qty}"></div></div>`;
+        }
+        state.brackets.forEach((b, idx) => {
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" data-bracket-check="${idx}" ${b.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">Кронштейн</div><div class="item-desc">тип</div></div>
+                <div class="controls">
+                    <select data-bracket-type="${idx}"><option value="wall" ${b.btype==="wall"?"selected":""}>Настенный</option><option value="pole" ${b.btype==="pole"?"selected":""}>На столб</option><option value="corner" ${b.btype==="corner"?"selected":""}>Угловой</option></select>
+                    <input type="number" class="qty-input" value="${b.qty}" data-bracket-qty="${idx}">
+                    <button class="btn-icon" data-remove-bracket="${idx}"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        });
+        html += `<button class="btn-add-row" id="addBracketBtn">+ Добавить кронштейн</button>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="shelvesCheck" ${state.shelves.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Полки под оборудование</div><div class="item-desc"></div></div><div class="controls"><input type="number" class="qty-input" id="shelvesQty" value="${state.shelves.qty}"></div></div>`;
+        html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="fastenersCheck" ${state.fasteners.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Дюбели и саморезы</div><div class="item-desc">тип саморезов, размер дюбелей</div></div><div class="controls"><select id="screwType"><option value="metal" ${state.fasteners.screwType==="metal"?"selected":""}>по металлу</option><option value="drywall" ${state.fasteners.screwType==="drywall"?"selected":""}>по гипсокартону</option><option value="wood" ${state.fasteners.screwType==="wood"?"selected":""}>по дереву</option></select><select id="dowelSizeSelect"><option value="6x40" ${state.fasteners.dowelSize==="6x40"?"selected":""}>6x40</option><option value="8x60">8x60</option><option value="10x80">10x80</option><option value="custom">свой</option></select><input type="text" id="dowelCustom" placeholder="размер" value="${escapeHtml(state.fasteners.customDowel)}" style="display:${state.fasteners.dowelSize==="custom"?"inline-block":"none"}; width:90px;"><input type="number" class="qty-input" id="fastenersQty" value="${state.fasteners.qty}"></div></div>`;
+        html += `</div></div>`;
+
+        // Дополнительно
+        html += `<div class="card"><div class="card-header" data-section="custom">➕ Дополнительно <i class="fas fa-chevron-down ${sectionsOpen.custom ? "open" : ""}"></i></div><div class="card-content" id="customContent" style="display:${sectionsOpen.custom ? "block" : "none"}">`;
+        state.custom.forEach((item, idx) => {
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" data-custom-check="${idx}" ${item.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><input type="text" value="${escapeHtml(item.name)}" data-custom-name="${idx}" style="width:100%; background:transparent; border:none; border-bottom:1px solid var(--border);"></div>
+                <div class="controls"><input type="number" class="qty-input" value="${item.qty}" data-custom-qty="${idx}"><button class="btn-icon" data-remove-custom="${idx}"><i class="fas fa-trash"></i></button></div>
+            </div>`;
+        });
+        html += `<button class="btn-add-row" id="addCustomBtn">+ Добавить позицию</button></div></div>`;
+
+        return html;
+    }
+
+    // --------------------------------------------------------------
+    //  RENDER MAIN
+    // --------------------------------------------------------------
+    function render() {
         let main = document.getElementById("appRoot");
         if (activeView === "history") {
             main.innerHTML = `
                 <div class="project-bar"><div class="project-name"><i class="fas fa-history"></i> История заказов</div><button class="btn-sm" id="backToObjectBtn">← Назад</button></div>
                 ${renderHistory()}
             `;
-            // attach history events after render
             setTimeout(() => {
                 document.querySelectorAll(".status-select").forEach(sel => {
                     let id = parseInt(sel.dataset.id);
@@ -748,122 +902,281 @@
             return;
         }
 
-        // Object view
-        let tech = state.tech;
-        let camCount = totalCameras();
-        let html = `
-            <div class="project-bar">
-                <div class="project-name"><i class="fas fa-building"></i> ${escapeHtml(state.currentProject)}</div>
-                <div class="project-actions">
-                    <button class="btn-sm" id="switchProjectBtn">Сменить</button>
-                    <button class="btn-sm" id="resetProjectBtn">Очистить</button>
-                </div>
-            </div>
-            <div class="flex-between" style="margin-bottom:12px">
-                <div style="display:flex; gap:8px; background:var(--surface); padding:4px; border-radius:40px; border:1px solid var(--border)">
-                    <button class="btn-sm ${tech === "ip" ? "active" : ""}" id="techIpBtn">IP</button>
-                    <button class="btn-sm ${tech === "hdcvi" ? "active" : ""}" id="techHdcviBtn">HDCVI</button>
-                </div>
-                <button class="btn-sm" id="exportOrderBtn">📋 Заказ</button>
-            </div>
-            <div class="card"><div class="card-content"><textarea id="notesField" placeholder="Заметки по объекту..." rows="2">${escapeHtml(state.notes)}</textarea></div></div>
-        `;
-        // ---- cameras ----
-        html += `<div class="card"><div class="card-header" data-section="cameras">📷 Камеры <i class="fas fa-chevron-down ${sectionsOpen.cameras ? "open" : ""}"></i></div><div class="card-content" id="camerasContent" style="display:${sectionsOpen.cameras ? "block" : "none"}">`;
-        state.cameras.forEach((cam, idx) => {
-            html += `<div class="item-row">
-                <div class="check-wrap"><input type="checkbox" ${cam.checked ? "checked" : ""} data-cam-check="${idx}"><div class="check-box"><span class="check-mark">✓</span></div></div>
-                <div class="item-info"><div class="item-name">Камера</div><div class="item-desc">${cam.type === "dome" ? "Купол" : "Цилиндр"} · ${cam.resolution}</div></div>
-                <div class="controls">
-                    <select data-cam-type="${idx}"><option value="dome" ${cam.type==="dome"?"selected":""}>Купол</option><option value="bullet" ${cam.type==="bullet"?"selected":""}>Цилиндр</option></select>
-                    <select data-cam-res="${idx}"><option value="2MP">2MP</option><option value="4MP" ${cam.resolution==="4MP"?"selected":""}>4MP</option><option value="5MP">5MP</option><option value="8MP">8MP</option></select>
-                    <input type="number" class="qty-input" value="${cam.qty}" data-cam-qty="${idx}">
-                    <button class="btn-icon" data-remove-cam="${idx}"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>`;
-        });
-        html += `<button class="btn-add-row" id="addCamBtn">+ Добавить камеру</button></div></div>`;
-
-        // recorder section (simplified for brevity, but full)
-        html += `<div class="card"><div class="card-header" data-section="recorder">${tech==="ip"?"🖥 NVR":"🖥 XVR"} <i class="fas fa-chevron-down ${sectionsOpen.recorder ? "open" : ""}"></i></div><div class="card-content" id="recorderContent" style="display:${sectionsOpen.recorder ? "block" : "none"}">`;
-        if (tech === "ip") {
-            state.recorders.forEach((rec, idx) => {
-                html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" ${rec.checked?"checked":""} data-rec-check="${idx}"><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">NVR</div><div class="item-desc">${rec.spec}</div></div><div class="controls"><select data-rec-spec="${idx}"><option>4 кан.</option><option ${rec.spec==="8 кан."?"selected":""}>8 кан.</option><option>16 кан.</option><option>32 кан.</option></select><select data-rec-type="${idx}"><option value="std" ${rec.nvrType==="std"?"selected":""}>Стандарт</option><option value="poe" ${rec.nvrType==="poe"?"selected":""}>Встр. PoE</option></select><input type="number" class="qty-input" value="${rec.qty}" data-rec-qty="${idx}"><button class="btn-icon" data-remove-rec="${idx}"><i class="fas fa-trash"></i></button></div></div>`;
-            });
-            html += `<button class="btn-add-row" id="addRecBtn">+ Добавить NVR</button>`;
-        } else {
-            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" ${state.xvr.checked?"checked":""} id="xvrCheck"><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">XVR</div><div class="item-desc">${state.xvr.spec}</div></div><div class="controls"><select id="xvrSpec"><option>4 кан.</option><option ${state.xvr.spec==="8 кан."?"selected":""}>8 кан.</option><option>16 кан.</option><option>32 кан.</option></select><input type="number" class="qty-input" id="xvrQty" value="${state.xvr.qty}"></div></div>`;
-        }
-        html += `</div></div>`;
-
-        // storage, power, cabling, workstation, mounting, custom sections need similar dynamic rendering
-        // Given space, I'll include a fully functional version with all sections as needed.
-        // For brevity, I'll attach the full final code in the final answer. This is a working template that will be expanded.
-        // However, due to token limits, I'll output a complete working HTML file that includes all sections and logic.
-        // In the final answer I will provide the full file content.
+        main.innerHTML = renderObject();
+        attachObjectEvents();
     }
 
-    function showToast(msg) {
-        let toast = document.getElementById("toastMsg");
-        toast.textContent = msg;
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 2000);
-    }
-
-    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-
-    // init
-    loadFromStorage();
-    // set up event listeners after render
-    function attachGlobalEvents() {
-        document.getElementById("btnObject")?.addEventListener("click", () => showObjectView());
-        document.getElementById("themeToggle")?.addEventListener("click", () => {
-            document.body.classList.toggle("dark");
-            saveState();
-        });
+    function attachObjectEvents() {
         document.getElementById("switchProjectBtn")?.addEventListener("click", showProjectManager);
         document.getElementById("resetProjectBtn")?.addEventListener("click", resetCurrentProject);
         document.getElementById("techIpBtn")?.addEventListener("click", () => switchTech("ip"));
         document.getElementById("techHdcviBtn")?.addEventListener("click", () => switchTech("hdcvi"));
         document.getElementById("exportOrderBtn")?.addEventListener("click", showExportModal);
         document.getElementById("notesField")?.addEventListener("input", (e) => { state.notes = e.target.value; saveState(); });
+
+        // toggle sections
+        document.querySelectorAll(".card-header").forEach(header => {
+            let section = header.dataset.section;
+            if (section) {
+                header.addEventListener("click", () => {
+                    sectionsOpen[section] = !sectionsOpen[section];
+                    render();
+                });
+            }
+        });
+
+        // Cameras
         document.getElementById("addCamBtn")?.addEventListener("click", addCamera);
-        // dynamic removal handlers...
-        // In a full version, we'd attach all necessary event handlers via event delegation.
+        document.querySelectorAll("[data-cam-check]").forEach(cb => {
+            let idx = parseInt(cb.dataset.camCheck);
+            cb.addEventListener("change", (e) => { state.cameras[idx].checked = e.target.checked; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-cam-type]").forEach(sel => {
+            let idx = parseInt(sel.dataset.camType);
+            sel.addEventListener("change", (e) => { state.cameras[idx].type = e.target.value; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-cam-res]").forEach(sel => {
+            let idx = parseInt(sel.dataset.camRes);
+            sel.addEventListener("change", (e) => { state.cameras[idx].resolution = e.target.value; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-cam-qty]").forEach(inp => {
+            let idx = parseInt(inp.dataset.camQty);
+            inp.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.cameras[idx].qty = Math.max(0, val); saveState(); render(); });
+        });
+        document.querySelectorAll("[data-remove-cam]").forEach(btn => {
+            let idx = parseInt(btn.dataset.removeCam);
+            btn.addEventListener("click", () => removeCamera(idx));
+        });
+
+        // Recorders (IP)
+        if (state.tech === "ip") {
+            document.getElementById("addRecBtn")?.addEventListener("click", addRecorder);
+            document.querySelectorAll("[data-rec-check]").forEach(cb => {
+                let idx = parseInt(cb.dataset.recCheck);
+                cb.addEventListener("change", (e) => { state.recorders[idx].checked = e.target.checked; saveState(); render(); });
+            });
+            document.querySelectorAll("[data-rec-spec]").forEach(sel => {
+                let idx = parseInt(sel.dataset.recSpec);
+                sel.addEventListener("change", (e) => { state.recorders[idx].spec = e.target.value; saveState(); render(); });
+            });
+            document.querySelectorAll("[data-rec-type]").forEach(sel => {
+                let idx = parseInt(sel.dataset.recType);
+                sel.addEventListener("change", (e) => { state.recorders[idx].nvrType = e.target.value; saveState(); render(); });
+            });
+            document.querySelectorAll("[data-rec-qty]").forEach(inp => {
+                let idx = parseInt(inp.dataset.recQty);
+                inp.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.recorders[idx].qty = Math.max(0, val); saveState(); render(); });
+            });
+            document.querySelectorAll("[data-remove-rec]").forEach(btn => {
+                let idx = parseInt(btn.dataset.removeRec);
+                btn.addEventListener("click", () => removeRecorder(idx));
+            });
+        } else {
+            let xvrCheck = document.getElementById("xvrCheck");
+            if (xvrCheck) xvrCheck.addEventListener("change", (e) => { state.xvr.checked = e.target.checked; saveState(); render(); });
+            let xvrSpec = document.getElementById("xvrSpec");
+            if (xvrSpec) xvrSpec.addEventListener("change", (e) => { state.xvr.spec = e.target.value; saveState(); render(); });
+            let xvrQty = document.getElementById("xvrQty");
+            if (xvrQty) xvrQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.xvr.qty = Math.max(0, val); saveState(); render(); });
+        }
+
+        // Storage
+        document.getElementById("addStorageBtn")?.addEventListener("click", addStorage);
+        document.querySelectorAll("[data-storage-check]").forEach(cb => {
+            let idx = parseInt(cb.dataset.storageCheck);
+            cb.addEventListener("change", (e) => { state.storage[idx].checked = e.target.checked; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-storage-spec]").forEach(sel => {
+            let idx = parseInt(sel.dataset.storageSpec);
+            sel.addEventListener("change", (e) => { state.storage[idx].spec = e.target.value; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-storage-qty]").forEach(inp => {
+            let idx = parseInt(inp.dataset.storageQty);
+            inp.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.storage[idx].qty = Math.max(0, val); saveState(); render(); });
+        });
+        document.querySelectorAll("[data-remove-storage]").forEach(btn => {
+            let idx = parseInt(btn.dataset.removeStorage);
+            btn.addEventListener("click", () => removeStorage(idx));
+        });
+
+        // Power devices
+        document.getElementById("addPowerBtn")?.addEventListener("click", addPowerDevice);
+        document.querySelectorAll("[data-power-check]").forEach(cb => {
+            let idx = parseInt(cb.dataset.powerCheck);
+            cb.addEventListener("change", (e) => { state.powerDevices[idx].checked = e.target.checked; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-power-spec]").forEach(sel => {
+            let idx = parseInt(sel.dataset.powerSpec);
+            sel.addEventListener("change", (e) => { state.powerDevices[idx].spec = e.target.value; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-power-qty]").forEach(inp => {
+            let idx = parseInt(inp.dataset.powerQty);
+            inp.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.powerDevices[idx].qty = Math.max(0, val); saveState(); render(); });
+        });
+        document.querySelectorAll("[data-remove-power]").forEach(btn => {
+            let idx = parseInt(btn.dataset.removePower);
+            btn.addEventListener("click", () => removePowerDevice(idx));
+        });
+
+        // HDCVI specifics
+        if (state.tech === "hdcvi") {
+            let bncCheck = document.getElementById("bncCheck");
+            if (bncCheck) bncCheck.addEventListener("change", (e) => { state.bnc.checked = e.target.checked; saveState(); render(); });
+            let bncQty = document.getElementById("bncQty");
+            if (bncQty) bncQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.bnc.qty = Math.max(0, val); saveState(); render(); });
+            let balunsCheck = document.getElementById("balunsCheck");
+            if (balunsCheck) balunsCheck.addEventListener("change", (e) => { state.baluns.checked = e.target.checked; saveState(); render(); });
+            let balunsQty = document.getElementById("balunsQty");
+            if (balunsQty) balunsQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) { state.baluns.auto = false; state.baluns.qty = val; saveState(); render(); } });
+        }
+
+        // Cable
+        let cableCheck = document.getElementById("cableCheck");
+        if (cableCheck) cableCheck.addEventListener("change", (e) => { state.cable.checked = e.target.checked; saveState(); render(); });
+        let cableType = document.getElementById("cableType");
+        if (cableType) cableType.addEventListener("change", (e) => { state.cable.type = e.target.value; saveState(); render(); });
+        let cableEnv = document.getElementById("cableEnv");
+        if (cableEnv) cableEnv.addEventListener("change", (e) => { state.cable.env = e.target.value; saveState(); render(); });
+        let cableQty = document.getElementById("cableQty");
+        if (cableQty) cableQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.cable.qty = Math.max(0, val); saveState(); render(); });
+
+        // Corrugation
+        let corrCheck = document.getElementById("corrCheck");
+        if (corrCheck) corrCheck.addEventListener("change", (e) => { state.corrugation.checked = e.target.checked; saveState(); render(); });
+        let corrDia = document.getElementById("corrDia");
+        if (corrDia) corrDia.addEventListener("change", (e) => { state.corrugation.dia = e.target.value; saveState(); render(); });
+        let corrColor = document.getElementById("corrColor");
+        if (corrColor) corrColor.addEventListener("change", (e) => { state.corrugation.color = e.target.value; saveState(); render(); });
+        let corrQty = document.getElementById("corrQty");
+        if (corrQty) corrQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.corrugation.qty = Math.max(0, val); saveState(); render(); });
+
+        // Clips
+        let clipsCheck = document.getElementById("clipsCheck");
+        if (clipsCheck) clipsCheck.addEventListener("change", (e) => { state.clips.checked = e.target.checked; saveState(); render(); });
+        let clipsKind = document.getElementById("clipsKind");
+        if (clipsKind) clipsKind.addEventListener("change", (e) => { state.clips.kind = e.target.value; saveState(); render(); });
+        let clipsQty = document.getElementById("clipsQty");
+        if (clipsQty) clipsQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.clips.qty = Math.max(0, val); saveState(); render(); });
+
+        // Strap
+        let strapCheck = document.getElementById("strapCheck");
+        if (strapCheck) strapCheck.addEventListener("change", (e) => { state.padsStrap.checked = e.target.checked; saveState(); render(); });
+        let strapQty = document.getElementById("strapQty");
+        if (strapQty) strapQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.padsStrap.qty = Math.max(0, val); saveState(); render(); });
+
+        // Workstation
+        let monitorCheck = document.getElementById("monitorCheck");
+        if (monitorCheck) monitorCheck.addEventListener("change", (e) => { state.monitor.checked = e.target.checked; saveState(); render(); });
+        let monitorSpec = document.getElementById("monitorSpec");
+        if (monitorSpec) monitorSpec.addEventListener("change", (e) => { state.monitor.spec = e.target.value; saveState(); render(); });
+        let monitorQty = document.getElementById("monitorQty");
+        if (monitorQty) monitorQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.monitor.qty = Math.max(0, val); saveState(); render(); });
+        let hdmiCheck = document.getElementById("hdmiCheck");
+        if (hdmiCheck) hdmiCheck.addEventListener("change", (e) => { state.hdmi.checked = e.target.checked; saveState(); render(); });
+        let hdmiSpec = document.getElementById("hdmiSpec");
+        if (hdmiSpec) hdmiSpec.addEventListener("change", (e) => { state.hdmi.spec = e.target.value; saveState(); render(); });
+        let hdmiQty = document.getElementById("hdmiQty");
+        if (hdmiQty) hdmiQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.hdmi.qty = Math.max(0, val); saveState(); render(); });
+        let vgaCheck = document.getElementById("vgaCheck");
+        if (vgaCheck) vgaCheck.addEventListener("change", (e) => { state.vga.checked = e.target.checked; saveState(); render(); });
+        let vgaSpec = document.getElementById("vgaSpec");
+        if (vgaSpec) vgaSpec.addEventListener("change", (e) => { state.vga.spec = e.target.value; saveState(); render(); });
+        let vgaQty = document.getElementById("vgaQty");
+        if (vgaQty) vgaQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.vga.qty = Math.max(0, val); saveState(); render(); });
+        let injectorCheck = document.getElementById("injectorCheck");
+        if (injectorCheck) injectorCheck.addEventListener("change", (e) => { state.injector.checked = e.target.checked; saveState(); render(); });
+        let injectorOutputs = document.getElementById("injectorOutputs");
+        if (injectorOutputs) injectorOutputs.addEventListener("change", (e) => { state.injector.outputs = parseInt(e.target.value); saveState(); render(); });
+        let injectorQty = document.getElementById("injectorQty");
+        if (injectorQty) injectorQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.injector.qty = Math.max(0, val); saveState(); render(); });
+
+        // Mounting
+        let jboxCheck = document.getElementById("jboxCheck");
+        if (jboxCheck) jboxCheck.addEventListener("change", (e) => { state.junctionBoxes.checked = e.target.checked; saveState(); render(); });
+        let jboxSize = document.getElementById("jboxSize");
+        if (jboxSize) jboxSize.addEventListener("change", (e) => {
+            let val = e.target.value;
+            state.junctionBoxes.size = val;
+            if (val !== "custom") state.junctionBoxes.customSize = "";
+            saveState(); render();
+        });
+        let jboxCustom = document.getElementById("jboxCustom");
+        if (jboxCustom) jboxCustom.addEventListener("input", (e) => { state.junctionBoxes.customSize = e.target.value; saveState(); });
+        let jboxQty = document.getElementById("jboxQty");
+        if (jboxQty) jboxQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.junctionBoxes.qty = Math.max(0, val); saveState(); render(); });
+        if (state.tech === "ip") {
+            let connectorsCheck = document.getElementById("connectorsCheck");
+            if (connectorsCheck) connectorsCheck.addEventListener("change", (e) => { state.connectors.checked = e.target.checked; saveState(); render(); });
+            let connectorsQty = document.getElementById("connectorsQty");
+            if (connectorsQty) connectorsQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) { state.connectors.auto = false; state.connectors.qty = val; saveState(); render(); } });
+        }
+        document.getElementById("addBracketBtn")?.addEventListener("click", addBracket);
+        document.querySelectorAll("[data-bracket-check]").forEach(cb => {
+            let idx = parseInt(cb.dataset.bracketCheck);
+            cb.addEventListener("change", (e) => { state.brackets[idx].checked = e.target.checked; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-bracket-type]").forEach(sel => {
+            let idx = parseInt(sel.dataset.bracketType);
+            sel.addEventListener("change", (e) => { state.brackets[idx].btype = e.target.value; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-bracket-qty]").forEach(inp => {
+            let idx = parseInt(inp.dataset.bracketQty);
+            inp.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.brackets[idx].qty = Math.max(0, val); saveState(); render(); });
+        });
+        document.querySelectorAll("[data-remove-bracket]").forEach(btn => {
+            let idx = parseInt(btn.dataset.removeBracket);
+            btn.addEventListener("click", () => removeBracket(idx));
+        });
+        let shelvesCheck = document.getElementById("shelvesCheck");
+        if (shelvesCheck) shelvesCheck.addEventListener("change", (e) => { state.shelves.checked = e.target.checked; saveState(); render(); });
+        let shelvesQty = document.getElementById("shelvesQty");
+        if (shelvesQty) shelvesQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.shelves.qty = Math.max(0, val); saveState(); render(); });
+        let fastenersCheck = document.getElementById("fastenersCheck");
+        if (fastenersCheck) fastenersCheck.addEventListener("change", (e) => { state.fasteners.checked = e.target.checked; saveState(); render(); });
+        let screwType = document.getElementById("screwType");
+        if (screwType) screwType.addEventListener("change", (e) => { state.fasteners.screwType = e.target.value; saveState(); render(); });
+        let dowelSizeSelect = document.getElementById("dowelSizeSelect");
+        if (dowelSizeSelect) dowelSizeSelect.addEventListener("change", (e) => {
+            let val = e.target.value;
+            state.fasteners.dowelSize = val;
+            if (val !== "custom") state.fasteners.customDowel = "";
+            saveState(); render();
+        });
+        let dowelCustom = document.getElementById("dowelCustom");
+        if (dowelCustom) dowelCustom.addEventListener("input", (e) => { state.fasteners.customDowel = e.target.value; saveState(); });
+        let fastenersQty = document.getElementById("fastenersQty");
+        if (fastenersQty) fastenersQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.fasteners.qty = Math.max(0, val); saveState(); render(); });
+
+        // Custom
+        document.getElementById("addCustomBtn")?.addEventListener("click", addCustomItem);
+        document.querySelectorAll("[data-custom-check]").forEach(cb => {
+            let idx = parseInt(cb.dataset.customCheck);
+            cb.addEventListener("change", (e) => { state.custom[idx].checked = e.target.checked; saveState(); render(); });
+        });
+        document.querySelectorAll("[data-custom-name]").forEach(inp => {
+            let idx = parseInt(inp.dataset.customName);
+            inp.addEventListener("change", (e) => { state.custom[idx].name = e.target.value; saveState(); });
+        });
+        document.querySelectorAll("[data-custom-qty]").forEach(inp => {
+            let idx = parseInt(inp.dataset.customQty);
+            inp.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.custom[idx].qty = Math.max(0, val); saveState(); render(); });
+        });
+        document.querySelectorAll("[data-remove-custom]").forEach(btn => {
+            let idx = parseInt(btn.dataset.removeCustom);
+            btn.addEventListener("click", () => removeCustom(idx));
+        });
     }
 
-    // render and attach
+    // --------------------------------------------------------------
+    //  INIT
+    // --------------------------------------------------------------
+    loadFromStorage();
+    document.getElementById("btnObject")?.addEventListener("click", () => showObjectView());
+    document.getElementById("themeToggle")?.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        saveState();
+    });
     render();
-    attachGlobalEvents();
-    // use event delegation for dynamic elements
-    document.getElementById("appRoot")?.addEventListener("change", (e) => {
-        let target = e.target;
-        if (target.matches("[data-cam-type]")) {
-            let idx = parseInt(target.dataset.camType);
-            state.cameras[idx].type = target.value;
-            saveState(); render();
-        } else if (target.matches("[data-cam-res]")) {
-            let idx = parseInt(target.dataset.camRes);
-            state.cameras[idx].resolution = target.value;
-            saveState(); render();
-        } else if (target.matches("[data-cam-qty]")) {
-            let idx = parseInt(target.dataset.camQty);
-            let val = parseInt(target.value);
-            if (!isNaN(val)) state.cameras[idx].qty = Math.max(0, val);
-            saveState(); render();
-        } else if (target.matches("[data-cam-check]")) {
-            let idx = parseInt(target.dataset.camCheck);
-            state.cameras[idx].checked = target.checked;
-            saveState(); render();
-        }
-        // etc. full implementation would cover all fields.
-    });
-    document.getElementById("appRoot")?.addEventListener("click", (e) => {
-        if (e.target.closest("[data-remove-cam]")) {
-            let idx = parseInt(e.target.closest("[data-remove-cam]").dataset.removeCam);
-            removeCamera(idx);
-        }
-    });
 </script>
 </body>
 </html>
