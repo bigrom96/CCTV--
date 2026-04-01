@@ -6,7 +6,7 @@
     <title>VisionProtect — Спецификация</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* (стили оставляем те же, что в предыдущей версии, без изменений) */
+        /* (стили без изменений — они уже были оптимальны) */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         :root {
             --bg: #f8fafc; --surface: #ffffff; --surface2: #f1f5f9; --border: #e2e8f0;
@@ -168,8 +168,8 @@
         xvr: { spec: "8 кан.", qty: 1, checked: true },
         storage: [{ spec: "2TB", qty: 1, checked: true }],
         powerDevices: [{ spec: "8 портов", qty: 1, checked: true }],
-        bnc: { qty: 10, checked: false },
-        baluns: { qty: 10, checked: false, auto: true },
+        bnc: { qty: 10, checked: false, auto: true },
+        dcConnector: { qty: 5, checked: false, auto: true },   // DC коннектор питания (для HDCVI)
         cable: { type: "UTP", env: "in", qty: 100, checked: false },
         corrugation: { dia: "20mm", color: "серая", qty: 50, checked: false },
         clips: { dia: "20mm", qty: 50, checked: false, kind: "clips" },
@@ -192,28 +192,34 @@
         cameras: true, recorder: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true
     };
 
-    // Модели по брендам и разрешению
+    // Модели по брендам и разрешению + тип (dome/bullet)
     const cameraModels = {
         "Hikvision": {
-            "2MP": ["DS-2CD2023G2-I", "DS-2CD2043G2-I", "DS-2CD2123G2-I"],
-            "4MP": ["DS-2CD2345G1-I", "DS-2CD2045G2-I", "DS-2CD2145G2-I"],
-            "5MP": ["DS-2CD2355G1-I", "DS-2CD2055G2-I"],
-            "8MP": ["DS-2CD2387G2-LU", "DS-2CD2087G2-LU"]
+            "2MP": { dome: ["DS-2CD2123G2-I"], bullet: ["DS-2CD2023G2-I", "DS-2CD2043G2-I"] },
+            "4MP": { dome: ["DS-2CD2145G2-I"], bullet: ["DS-2CD2345G1-I", "DS-2CD2045G2-I"] },
+            "5MP": { dome: [], bullet: ["DS-2CD2355G1-I", "DS-2CD2055G2-I"] },
+            "8MP": { dome: ["DS-2CD2387G2-LU"], bullet: ["DS-2CD2087G2-LU"] }
         },
         "Dahua": {
-            "2MP": ["DH-IPC-HFW1230S", "DH-IPC-HDBW1230R", "DH-IPC-HDW1230T"],
-            "4MP": ["DH-IPC-HFW1430S", "DH-IPC-HDBW1430R", "DH-IPC-HDW1430T"],
-            "5MP": ["DH-IPC-HFW1530S", "DH-IPC-HDBW1530R"],
-            "8MP": ["DH-IPC-HFW1830S", "DH-IPC-HDBW1830R"]
+            "2MP": {
+                dome: ["IPC-T1E20-A", "IPC-HDW1230T1P", "IPC-HDW1239V-A-IL"],
+                bullet: ["IPC-B1E20-A", "IPC-HFW1230S1P", "IPC-HFW1239TL1-A-IL"]
+            },
+            "4MP": {
+                dome: ["IPC-T1E40-A", "IPC-HDW1431T1P", "IPC-HDW1439V-A-IL"],
+                bullet: ["IPC-B1E40-A", "IPC-HFW1431S1P", "IPC-HFW1439TL1-A-IL"]
+            },
+            "5MP": { dome: [], bullet: [] },
+            "8MP": { dome: [], bullet: [] }
         },
         "HiWatch": {
-            "2MP": ["DS-I204", "DS-I205", "DS-I204-B"],
-            "4MP": ["DS-I404", "DS-I405", "DS-I404-B"],
-            "5MP": ["DS-I504", "DS-I505"],
-            "8MP": ["DS-I804", "DS-I805"]
+            "2MP": { dome: ["DS-I204"], bullet: ["DS-I205", "DS-I204-B"] },
+            "4MP": { dome: ["DS-I404"], bullet: ["DS-I405", "DS-I404-B"] },
+            "5MP": { dome: ["DS-I504"], bullet: ["DS-I505"] },
+            "8MP": { dome: ["DS-I804"], bullet: ["DS-I805"] }
         }
     };
-    const brandsList = ["", "Hikvision", "Dahua", "HiWatch"]; // пустой бренд означает "не выбран"
+    const brandsList = ["", "Hikvision", "Dahua", "HiWatch"];
 
     // --------------------------------------------------------------
     //  HELPERS
@@ -222,7 +228,7 @@
         let projData = {
             tech: state.tech, notes: state.notes, cameras: state.cameras, recorders: state.recorders,
             xvr: state.xvr, storage: state.storage, powerDevices: state.powerDevices, bnc: state.bnc,
-            baluns: state.baluns, cable: state.cable, corrugation: state.corrugation, clips: state.clips,
+            dcConnector: state.dcConnector, cable: state.cable, corrugation: state.corrugation, clips: state.clips,
             padsStrap: state.padsStrap, junctionBoxes: state.junctionBoxes, connectors: state.connectors,
             brackets: state.brackets, shelves: state.shelves, fasteners: state.fasteners,
             monitor: state.monitor, hdmi: state.hdmi, vga: state.vga, injector: state.injector, custom: state.custom
@@ -249,7 +255,9 @@
         state.currentProject = saved.currentProject || "default";
         if (!state.projects[state.currentProject]) state.projects[state.currentProject] = getEmptyProject();
         Object.assign(state, state.projects[state.currentProject]);
-        // Убедимся, что у камер есть поля brand/model (для старых данных)
+        // Для обратной совместимости: если нет dcConnector, добавить
+        if (state.dcConnector === undefined) state.dcConnector = { qty: 5, checked: false, auto: true };
+        if (state.baluns) delete state.baluns; // удаляем старые балуны
         state.cameras.forEach(cam => {
             if (cam.brand === undefined) cam.brand = "";
             if (cam.model === undefined) cam.model = "";
@@ -266,8 +274,8 @@
             xvr: { spec: "8 кан.", qty: 1, checked: true },
             storage: [{ spec: "2TB", qty: 1, checked: true }],
             powerDevices: [{ spec: "8 портов", qty: 1, checked: true }],
-            bnc: { qty: 10, checked: false },
-            baluns: { qty: 10, checked: false, auto: true },
+            bnc: { qty: 10, checked: false, auto: true },
+            dcConnector: { qty: 5, checked: false, auto: true },
             cable: { type: "UTP", env: "in", qty: 100, checked: false },
             corrugation: { dia: "20mm", color: "серая", qty: 50, checked: false },
             clips: { dia: "20mm", qty: 50, checked: false, kind: "clips" },
@@ -292,7 +300,10 @@
     function updateAutoValues() {
         let camCount = totalCameras();
         if (state.connectors.auto) state.connectors.qty = camCount * 2 + 5;
-        if (state.tech === "hdcvi" && state.baluns.auto) state.baluns.qty = camCount * 2 + 5;
+        if (state.tech === "hdcvi") {
+            if (state.bnc.auto) state.bnc.qty = camCount * 2 + 5;
+            if (state.dcConnector.auto) state.dcConnector.qty = camCount + 1;
+        }
         if (state.junctionBoxes.auto) state.junctionBoxes.qty = camCount;
     }
 
@@ -425,7 +436,7 @@
         state.powerDevices.forEach(p => { if (p.checked && p.qty) add(state.tech === "ip" ? `PoE-коммутатор ${p.spec}` : `Блок питания ${p.spec}`, p.qty); });
         if (state.tech === "hdcvi") {
             if (state.bnc.checked && state.bnc.qty) add("BNC-коннекторы", state.bnc.qty);
-            if (state.baluns.checked && state.baluns.qty) add("Балуны (пассивные)", state.baluns.qty);
+            if (state.dcConnector.checked && state.dcConnector.qty) add("DC коннектор питания", state.dcConnector.qty);
         }
         if (state.cable.checked && state.cable.qty) {
             let cableName = state.cable.type === "UTP" ? "Кабель UTP" : "Кабель F/UTP";
@@ -555,10 +566,15 @@
         // Камеры
         html += `<div class="card"><div class="card-header" data-section="cameras">📷 Камеры <i class="fas fa-chevron-down ${sectionsOpen.cameras ? "open" : ""}"></i></div><div class="card-content" id="camerasContent" style="display:${sectionsOpen.cameras ? "block" : "none"}">`;
         state.cameras.forEach((cam, idx) => {
-            // фильтр моделей по выбранному бренду и разрешению
+            // получение списка моделей в зависимости от бренда, разрешения и типа
             let modelOptions = "";
             if (cam.brand && cameraModels[cam.brand] && cameraModels[cam.brand][cam.resolution]) {
-                modelOptions = `<option value="">-- не выбрана --</option>` + cameraModels[cam.brand][cam.resolution].map(m => `<option value="${m}" ${cam.model === m ? "selected" : ""}>${m}</option>`).join("");
+                let modelsForType = cameraModels[cam.brand][cam.resolution][cam.type === "dome" ? "dome" : "bullet"] || [];
+                if (modelsForType.length) {
+                    modelOptions = `<option value="">-- не выбрана --</option>` + modelsForType.map(m => `<option value="${m}" ${cam.model === m ? "selected" : ""}>${m}</option>`).join("");
+                } else {
+                    modelOptions = `<option value="">-- нет моделей для этого типа --</option>`;
+                }
             } else {
                 modelOptions = `<option value="">-- сначала выберите бренд --</option>`;
             }
@@ -637,8 +653,16 @@
         });
         html += `<button class="btn-add-row" id="addPowerBtn">+ Добавить</button>`;
         if (tech === "hdcvi") {
-            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="bncCheck" ${state.bnc.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">BNC-коннекторы</div><div class="item-desc">компрессионные</div></div><div class="controls"><input type="number" class="qty-input" id="bncQty" value="${state.bnc.qty}"></div></div>`;
-            html += `<div class="item-row"><div class="check-wrap"><input type="checkbox" id="balunsCheck" ${state.baluns.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div><div class="item-info"><div class="item-name">Балуны (пассивные)</div><div class="item-desc">авторасчёт</div></div><div class="controls"><input type="number" class="qty-input" id="balunsQty" value="${state.baluns.qty}"></div></div>`;
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" id="bncCheck" ${state.bnc.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">BNC-коннекторы</div><div class="item-desc">авторасчёт (камеры×2+5)</div></div>
+                <div class="controls"><input type="number" class="qty-input" id="bncQty" value="${state.bnc.qty}"></div>
+            </div>`;
+            html += `<div class="item-row">
+                <div class="check-wrap"><input type="checkbox" id="dcConnectorCheck" ${state.dcConnector.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
+                <div class="item-info"><div class="item-name">DC коннектор питания</div><div class="item-desc">авторасчёт (камеры+1)</div></div>
+                <div class="controls"><input type="number" class="qty-input" id="dcConnectorQty" value="${state.dcConnector.qty}"></div>
+            </div>`;
         }
         html += `</div></div>`;
 
@@ -765,7 +789,6 @@
             let idx = parseInt(sel.dataset.camRes);
             sel.addEventListener("change", (e) => { 
                 state.cameras[idx].resolution = e.target.value;
-                // сбросить модель, если новая модель не подходит
                 state.cameras[idx].model = "";
                 saveState(); render();
             });
@@ -866,11 +889,11 @@
             let bncCheck = document.getElementById("bncCheck");
             if (bncCheck) bncCheck.addEventListener("change", (e) => { state.bnc.checked = e.target.checked; saveState(); render(); });
             let bncQty = document.getElementById("bncQty");
-            if (bncQty) bncQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) state.bnc.qty = Math.max(0, val); saveState(); render(); });
-            let balunsCheck = document.getElementById("balunsCheck");
-            if (balunsCheck) balunsCheck.addEventListener("change", (e) => { state.baluns.checked = e.target.checked; saveState(); render(); });
-            let balunsQty = document.getElementById("balunsQty");
-            if (balunsQty) balunsQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) { state.baluns.auto = false; state.baluns.qty = val; saveState(); render(); } });
+            if (bncQty) bncQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) { state.bnc.auto = false; state.bnc.qty = val; saveState(); render(); } });
+            let dcCheck = document.getElementById("dcConnectorCheck");
+            if (dcCheck) dcCheck.addEventListener("change", (e) => { state.dcConnector.checked = e.target.checked; saveState(); render(); });
+            let dcQty = document.getElementById("dcConnectorQty");
+            if (dcQty) dcQty.addEventListener("change", (e) => { let val = parseInt(e.target.value); if (!isNaN(val)) { state.dcConnector.auto = false; state.dcConnector.qty = val; saveState(); render(); } });
         }
 
         // Cable
