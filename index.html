@@ -6,366 +6,131 @@
     <title>VisionProtect — Спецификация</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        /* (стили оставляем те же, что в предыдущей версии, без изменений) */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         :root {
-            --bg: #f8fafc;
-            --surface: #ffffff;
-            --surface2: #f1f5f9;
-            --border: #e2e8f0;
-            --text: #0f172a;
-            --text-muted: #475569;
-            --accent: #3b82f6;
-            --accent2: #f97316;
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --bg: #f8fafc; --surface: #ffffff; --surface2: #f1f5f9; --border: #e2e8f0;
+            --text: #0f172a; --text-muted: #475569; --accent: #3b82f6; --accent2: #f97316;
+            --danger: #ef4444; --success: #10b981; --shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         body.dark {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --surface2: #0f172a;
-            --border: #334155;
-            --text: #e2e8f0;
-            --text-muted: #94a3b8;
-            --accent: #60a5fa;
-            --accent2: #fb923c;
+            --bg: #0f172a; --surface: #1e293b; --surface2: #0f172a; --border: #334155;
+            --text: #e2e8f0; --text-muted: #94a3b8; --accent: #60a5fa; --accent2: #fb923c;
             --shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-            line-height: 1.5;
-            transition: background 0.2s, color 0.2s;
-            font-size: 16px;
-            -webkit-text-size-adjust: 100%;
-            padding-bottom: 90px;
+            background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            line-height: 1.5; transition: background 0.2s, color 0.2s; font-size: 16px;
+            -webkit-text-size-adjust: 100%; padding-bottom: 90px;
         }
         .app-header {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(10px);
-            padding: 12px 16px;
+            position: sticky; top: 0; z-index: 50; background: var(--surface);
+            border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); padding: 12px 16px;
         }
         .header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 700px;
-            margin: 0 auto;
-            gap: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 700px; margin: 0 auto; gap: 12px;
         }
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
+        .nav-buttons { display: flex; gap: 12px; }
         .nav-btn {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 8px 20px;
-            font-weight: 600;
-            font-size: 15px;
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.2s;
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 40px;
+            padding: 8px 20px; font-weight: 600; font-size: 15px; color: var(--text);
+            cursor: pointer; transition: all 0.2s;
         }
-        .nav-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-        .nav-btn.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
+        .nav-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+        .nav-btn.disabled { opacity: 0.5; pointer-events: none; }
         .theme-toggle {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 18px;
-            line-height: 1;
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 40px;
+            padding: 8px 12px; cursor: pointer; font-size: 18px;
         }
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 16px 16px 20px;
-        }
+        .container { max-width: 700px; margin: 0 auto; padding: 16px 16px 20px; }
         .project-bar {
-            background: var(--surface);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow);
+            background: var(--surface); border-radius: 24px; border: 1px solid var(--border);
+            padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center;
+            justify-content: space-between; box-shadow: var(--shadow);
         }
-        .project-name {
-            font-weight: 600;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .project-name { font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 8px; }
         .btn-sm {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 30px;
+            padding: 6px 14px; font-size: 13px; font-weight: 500; cursor: pointer;
         }
         .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
+            background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+            margin-bottom: 20px; overflow: hidden; box-shadow: var(--shadow);
         }
         .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 18px;
-            background: var(--surface2);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 17px;
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 18px; background: var(--surface2); cursor: pointer;
+            font-weight: 600; font-size: 17px; border-bottom: 1px solid var(--border);
         }
-        .card-header i {
-            transition: transform 0.2s;
-        }
-        .card-header.open i {
-            transform: rotate(180deg);
-        }
-        .card-content {
-            padding: 16px 18px;
-        }
+        .card-header i { transition: transform 0.2s; }
+        .card-header.open i { transform: rotate(180deg); }
+        .card-content { padding: 16px 18px; }
         .item-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
+            display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
         }
-        .item-row:last-child {
-            border-bottom: none;
-        }
-        .check-wrap {
-            position: relative;
-            flex-shrink: 0;
-        }
-        .check-wrap input {
-            position: absolute;
-            opacity: 0;
-            width: 28px;
-            height: 28px;
-            cursor: pointer;
-        }
+        .item-row:last-child { border-bottom: none; }
+        .check-wrap { position: relative; flex-shrink: 0; }
+        .check-wrap input { position: absolute; opacity: 0; width: 28px; height: 28px; cursor: pointer; }
         .check-box {
-            width: 28px;
-            height: 28px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 28px; height: 28px; border: 2px solid var(--border); border-radius: 8px;
+            background: var(--bg); display: flex; align-items: center; justify-content: center;
         }
-        .check-wrap input:checked + .check-box {
-            background: var(--success);
-            border-color: var(--success);
-        }
-        .check-mark {
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            display: none;
-        }
-        .check-wrap input:checked + .check-box .check-mark {
-            display: block;
-        }
-        .item-info {
-            flex: 2;
-            min-width: 130px;
-        }
-        .item-name {
-            font-weight: 600;
-        }
-        .item-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+        .check-wrap input:checked + .check-box { background: var(--success); border-color: var(--success); }
+        .check-mark { color: white; font-size: 16px; font-weight: bold; display: none; }
+        .check-wrap input:checked + .check-box .check-mark { display: block; }
+        .item-info { flex: 2; min-width: 130px; }
+        .item-name { font-weight: 600; }
+        .item-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
         .controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
         }
         select, input[type="number"], input[type="text"], textarea {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 16px;
-            color: var(--text);
-            font-family: inherit;
+            background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+            padding: 8px 12px; font-size: 16px; color: var(--text); font-family: inherit;
         }
-        .qty-input {
-            width: 70px;
-            text-align: center;
-        }
-        .btn-icon {
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-muted);
-            padding: 4px;
-        }
+        .qty-input { width: 70px; text-align: center; }
+        .btn-icon { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 4px; }
         .btn-add-row {
-            margin-top: 12px;
-            background: var(--surface2);
-            border: 1px dashed var(--border);
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
+            margin-top: 12px; background: var(--surface2); border: 1px dashed var(--border);
+            border-radius: 40px; padding: 8px 16px; font-size: 14px; font-weight: 500;
+            cursor: pointer; width: 100%; text-align: center;
         }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
         .modal-card {
-            background: var(--surface);
-            border-radius: 32px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 20px;
-            border: 1px solid var(--border);
+            background: var(--surface); border-radius: 32px; max-width: 500px; width: 100%;
+            max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--border);
         }
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 40px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-        .btn-secondary {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-        }
+        .modal-buttons { display: flex; gap: 12px; margin-top: 20px; }
+        .modal-buttons button { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: var(--surface2); border: 1px solid var(--border); }
         .history-item {
-            background: var(--surface2);
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 12px;
+            background: var(--surface2); border-radius: 20px; padding: 12px; margin-bottom: 12px;
         }
         .status-select {
-            font-size: 13px;
-            padding: 4px 8px;
-            border-radius: 20px;
-            background: var(--bg);
+            font-size: 13px; padding: 4px 8px; border-radius: 20px; background: var(--bg);
             border: 1px solid var(--border);
         }
         .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--success);
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            z-index: 300;
-            opacity: 0;
-            transition: 0.2s;
-            pointer-events: none;
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: var(--success); color: #000; padding: 10px 20px; border-radius: 40px;
+            font-weight: 600; z-index: 300; opacity: 0; transition: 0.2s; pointer-events: none;
         }
-        .toast.show {
-            opacity: 1;
-        }
-        textarea {
-            width: 100%;
-            resize: vertical;
-        }
-        pre {
-            white-space: pre-wrap;
-            font-family: monospace;
-            font-size: 12px;
-            background: var(--bg);
-            padding: 8px;
-            border-radius: 12px;
-            margin: 8px 0;
-        }
+        .toast.show { opacity: 1; }
+        textarea { width: 100%; resize: vertical; }
+        pre { white-space: pre-wrap; font-family: monospace; font-size: 12px; background: var(--bg); padding: 8px; border-radius: 12px; margin: 8px 0; }
         .bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 12px 16px;
-            z-index: 100;
-            backdrop-filter: blur(10px);
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface);
+            border-top: 1px solid var(--border); padding: 12px 16px; z-index: 100; backdrop-filter: blur(10px);
         }
-        .bottom-bar .container {
-            padding: 0;
-        }
-        .bottom-bar .btn-primary {
-            width: 100%;
-            padding: 14px;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
+        .bottom-bar .container { padding: 0; }
+        .bottom-bar .btn-primary { width: 100%; padding: 14px; border-radius: 40px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -398,7 +163,7 @@
         currentProject: "default",
         tech: "ip",
         notes: "",
-        cameras: [{ type: "dome", resolution: "4MP", qty: 1, checked: true }],
+        cameras: [{ type: "dome", resolution: "4MP", qty: 1, checked: true, brand: "", model: "" }],
         recorders: [{ spec: "8 кан.", nvrType: "std", qty: 1, checked: true }],
         xvr: { spec: "8 кан.", qty: 1, checked: true },
         storage: [{ spec: "2TB", qty: 1, checked: true }],
@@ -427,34 +192,40 @@
         cameras: true, recorder: true, storage: true, power: true, cabling: true, workstation: true, mounting: true, custom: true
     };
 
+    // Модели по брендам и разрешению
+    const cameraModels = {
+        "Hikvision": {
+            "2MP": ["DS-2CD2023G2-I", "DS-2CD2043G2-I", "DS-2CD2123G2-I"],
+            "4MP": ["DS-2CD2345G1-I", "DS-2CD2045G2-I", "DS-2CD2145G2-I"],
+            "5MP": ["DS-2CD2355G1-I", "DS-2CD2055G2-I"],
+            "8MP": ["DS-2CD2387G2-LU", "DS-2CD2087G2-LU"]
+        },
+        "Dahua": {
+            "2MP": ["DH-IPC-HFW1230S", "DH-IPC-HDBW1230R", "DH-IPC-HDW1230T"],
+            "4MP": ["DH-IPC-HFW1430S", "DH-IPC-HDBW1430R", "DH-IPC-HDW1430T"],
+            "5MP": ["DH-IPC-HFW1530S", "DH-IPC-HDBW1530R"],
+            "8MP": ["DH-IPC-HFW1830S", "DH-IPC-HDBW1830R"]
+        },
+        "HiWatch": {
+            "2MP": ["DS-I204", "DS-I205", "DS-I204-B"],
+            "4MP": ["DS-I404", "DS-I405", "DS-I404-B"],
+            "5MP": ["DS-I504", "DS-I505"],
+            "8MP": ["DS-I804", "DS-I805"]
+        }
+    };
+    const brandsList = ["", "Hikvision", "Dahua", "HiWatch"]; // пустой бренд означает "не выбран"
+
     // --------------------------------------------------------------
     //  HELPERS
     // --------------------------------------------------------------
     function saveState() {
         let projData = {
-            tech: state.tech,
-            notes: state.notes,
-            cameras: state.cameras,
-            recorders: state.recorders,
-            xvr: state.xvr,
-            storage: state.storage,
-            powerDevices: state.powerDevices,
-            bnc: state.bnc,
-            baluns: state.baluns,
-            cable: state.cable,
-            corrugation: state.corrugation,
-            clips: state.clips,
-            padsStrap: state.padsStrap,
-            junctionBoxes: state.junctionBoxes,
-            connectors: state.connectors,
-            brackets: state.brackets,
-            shelves: state.shelves,
-            fasteners: state.fasteners,
-            monitor: state.monitor,
-            hdmi: state.hdmi,
-            vga: state.vga,
-            injector: state.injector,
-            custom: state.custom
+            tech: state.tech, notes: state.notes, cameras: state.cameras, recorders: state.recorders,
+            xvr: state.xvr, storage: state.storage, powerDevices: state.powerDevices, bnc: state.bnc,
+            baluns: state.baluns, cable: state.cable, corrugation: state.corrugation, clips: state.clips,
+            padsStrap: state.padsStrap, junctionBoxes: state.junctionBoxes, connectors: state.connectors,
+            brackets: state.brackets, shelves: state.shelves, fasteners: state.fasteners,
+            monitor: state.monitor, hdmi: state.hdmi, vga: state.vga, injector: state.injector, custom: state.custom
         };
         state.projects[state.currentProject] = projData;
         localStorage.setItem("vp_pro", JSON.stringify({
@@ -478,15 +249,19 @@
         state.currentProject = saved.currentProject || "default";
         if (!state.projects[state.currentProject]) state.projects[state.currentProject] = getEmptyProject();
         Object.assign(state, state.projects[state.currentProject]);
+        // Убедимся, что у камер есть поля brand/model (для старых данных)
+        state.cameras.forEach(cam => {
+            if (cam.brand === undefined) cam.brand = "";
+            if (cam.model === undefined) cam.model = "";
+        });
         if (saved.theme === "dark") document.body.classList.add("dark");
         else document.body.classList.remove("dark");
     }
 
     function getEmptyProject() {
         return {
-            tech: "ip",
-            notes: "",
-            cameras: [{ type: "dome", resolution: "4MP", qty: 1, checked: true }],
+            tech: "ip", notes: "",
+            cameras: [{ type: "dome", resolution: "4MP", qty: 1, checked: true, brand: "", model: "" }],
             recorders: [{ spec: "8 кан.", nvrType: "std", qty: 1, checked: true }],
             xvr: { spec: "8 кан.", qty: 1, checked: true },
             storage: [{ spec: "2TB", qty: 1, checked: true }],
@@ -542,7 +317,7 @@
     // --------------------------------------------------------------
     //  DYNAMIC ARRAYS
     // --------------------------------------------------------------
-    function addCamera() { state.cameras.push({ type: "dome", resolution: "4MP", qty: 1, checked: true }); saveState(); render(); }
+    function addCamera() { state.cameras.push({ type: "dome", resolution: "4MP", qty: 1, checked: true, brand: "", model: "" }); saveState(); render(); }
     function removeCamera(idx) { state.cameras.splice(idx,1); saveState(); render(); }
     function addPowerDevice() { state.powerDevices.push({ spec: state.tech === "ip" ? "8 портов" : "10A", qty: 1, checked: true }); saveState(); render(); }
     function removePowerDevice(idx) { state.powerDevices.splice(idx,1); saveState(); render(); }
@@ -633,7 +408,17 @@
         let idx = 1;
         function add(name, qty, unit="шт.") { if (qty > 0) lines.push(`${idx++}. ${name} — ${qty} ${unit}`); }
 
-        state.cameras.forEach(c => { if (c.checked && c.qty) add(`Камера ${c.resolution} (${c.type === "dome" ? "Купол" : "Цилиндр"})`, c.qty); });
+        state.cameras.forEach(c => {
+            if (c.checked && c.qty) {
+                let name = "";
+                if (c.brand && c.model) {
+                    name = `${c.brand} ${c.model} (${c.type === "dome" ? "Купол" : "Цилиндр"}, ${c.resolution})`;
+                } else {
+                    name = `Камера ${c.resolution} (${c.type === "dome" ? "Купол" : "Цилиндр"})`;
+                }
+                add(name, c.qty);
+            }
+        });
         if (state.tech === "ip") state.recorders.forEach(r => { if (r.checked && r.qty) add(`NVR ${r.spec}${r.nvrType === "poe" ? " (PoE)" : ""}`, r.qty); });
         else if (state.xvr.checked && state.xvr.qty) add(`XVR ${state.xvr.spec}`, state.xvr.qty);
         state.storage.forEach(s => { if (s.checked && s.qty) add(`HDD ${s.spec}`, s.qty); });
@@ -770,6 +555,13 @@
         // Камеры
         html += `<div class="card"><div class="card-header" data-section="cameras">📷 Камеры <i class="fas fa-chevron-down ${sectionsOpen.cameras ? "open" : ""}"></i></div><div class="card-content" id="camerasContent" style="display:${sectionsOpen.cameras ? "block" : "none"}">`;
         state.cameras.forEach((cam, idx) => {
+            // фильтр моделей по выбранному бренду и разрешению
+            let modelOptions = "";
+            if (cam.brand && cameraModels[cam.brand] && cameraModels[cam.brand][cam.resolution]) {
+                modelOptions = `<option value="">-- не выбрана --</option>` + cameraModels[cam.brand][cam.resolution].map(m => `<option value="${m}" ${cam.model === m ? "selected" : ""}>${m}</option>`).join("");
+            } else {
+                modelOptions = `<option value="">-- сначала выберите бренд --</option>`;
+            }
             html += `<div class="item-row">
                 <div class="check-wrap"><input type="checkbox" data-cam-check="${idx}" ${cam.checked ? "checked" : ""}><div class="check-box"><span class="check-mark">✓</span></div></div>
                 <div class="item-info"><div class="item-name">Камера</div><div class="item-desc">${cam.type === "dome" ? "Купол" : "Цилиндр"} · ${cam.resolution}</div></div>
@@ -778,6 +570,10 @@
                     <select data-cam-res="${idx}"><option value="2MP">2MP</option><option value="4MP" ${cam.resolution==="4MP"?"selected":""}>4MP</option><option value="5MP">5MP</option><option value="8MP">8MP</option></select>
                     <input type="number" class="qty-input" value="${cam.qty}" data-cam-qty="${idx}">
                     <button class="btn-icon" data-remove-cam="${idx}"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="controls" style="width:100%; margin-top:8px; margin-left:40px;">
+                    <select data-cam-brand="${idx}" style="flex:1"><option value="">Бренд (необязательно)</option>${brandsList.filter(b=>b).map(b => `<option value="${b}" ${cam.brand === b ? "selected" : ""}>${b}</option>`).join("")}</select>
+                    <select data-cam-model="${idx}" style="flex:2">${modelOptions}</select>
                 </div>
             </div>`;
         });
@@ -967,7 +763,24 @@
         });
         document.querySelectorAll("[data-cam-res]").forEach(sel => {
             let idx = parseInt(sel.dataset.camRes);
-            sel.addEventListener("change", (e) => { state.cameras[idx].resolution = e.target.value; saveState(); render(); });
+            sel.addEventListener("change", (e) => { 
+                state.cameras[idx].resolution = e.target.value;
+                // сбросить модель, если новая модель не подходит
+                state.cameras[idx].model = "";
+                saveState(); render();
+            });
+        });
+        document.querySelectorAll("[data-cam-brand]").forEach(sel => {
+            let idx = parseInt(sel.dataset.camBrand);
+            sel.addEventListener("change", (e) => {
+                state.cameras[idx].brand = e.target.value;
+                state.cameras[idx].model = "";
+                saveState(); render();
+            });
+        });
+        document.querySelectorAll("[data-cam-model]").forEach(sel => {
+            let idx = parseInt(sel.dataset.camModel);
+            sel.addEventListener("change", (e) => { state.cameras[idx].model = e.target.value; saveState(); render(); });
         });
         document.querySelectorAll("[data-cam-qty]").forEach(inp => {
             let idx = parseInt(inp.dataset.camQty);
@@ -1208,7 +1021,7 @@
     });
     document.getElementById("exportOrderBtnBottom")?.addEventListener("click", showExportModal);
     render();
-    showObjectView(); // ensure bottom bar visible
+    showObjectView();
 </script>
 </body>
 </html>
